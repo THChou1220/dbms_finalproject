@@ -5,7 +5,7 @@
    Framework: **flask**
 
 ### *Pre-Start*
-  至 https://sqlite.org/download.html 安裝SQLite
+  至 https://sqlite.org/download.html 下載SQLite
   
   安裝flask
   ```shell
