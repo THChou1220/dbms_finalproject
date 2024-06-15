@@ -4,10 +4,12 @@
    Database: **SQLite** <br>
    Framework: **flask**
 
-### *Start*
-  至官網安裝SQLite: https://sqlite.org/download.html
-
+### *Pre-Start*
+  至 https://sqlite.org/download.html 安裝SQLite
+  
   安裝flask
   ```shell
   pip install flask
-  ``` 
+  ```
+
+### *Start*
