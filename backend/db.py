@@ -4,6 +4,9 @@ def init_db():
     conn = sqlite3.connect('gym.db')
     cursor = conn.cursor()
 
+    # Enable foreign key support
+    cursor.execute('PRAGMA foreign_keys = ON')
+
     # Create tables
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Trainers (
@@ -30,8 +33,7 @@ def init_db():
             Age INTEGER,
             Email_ID TEXT,
             Trainer_ID INTEGER,
-            FOREIGN KEY (Subs) REFERENCES Subscriptions(Sub_ID),
-            FOREIGN KEY (Trainer_ID) REFERENCES Trainers(T_ID)
+            FOREIGN KEY (Trainer_ID) REFERENCES Trainers(T_ID) ON DELETE CASCADE ON UPDATE CASCADE
         )
     ''')
 

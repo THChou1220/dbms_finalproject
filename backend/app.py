@@ -5,10 +5,11 @@ app = Flask(__name__)
 
 def get_db_conn():
     conn = sqlite3.connect('gym.db')
+    conn.execute('PRAGMA foreign_keys = ON')
     conn.row_factory = sqlite3.Row
     return conn
 
-# Default
+# Default route
 @app.route('/', methods=['GET'])
 def default():
     return "Hello World"
@@ -68,6 +69,71 @@ def delete_trainer(T_ID):
     conn.commit()
     conn.close()
     return jsonify({'message': 'Trainer deleted'})
+
+# Members' routes
+@app.route('/members', methods=['GET'])
+def get_members():
+    conn = get_db_conn()
+    members = conn.execute('SELECT * FROM Members').fetchall()
+    conn.close()
+    return jsonify([dict(member) for member in members])
+
+@app.route('/members/<int:Mem_ID>', methods=['GET'])
+def get_member(Mem_ID):
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    return jsonify(dict(member))
+
+@app.route('/members', methods=['POST'])
+def create_member():
+    new_member = request.get_json()
+    Mem_ID = new_member['Mem_ID']
+    M_Name = new_member['M_Name']
+    Phone = new_member['Phone']
+    Start_Date = new_member['Start_Date']
+    Gender = new_member['Gender']
+    Subs = new_member['Subs']
+    Height = new_member['Height']
+    Weight = new_member['Weight']
+    Age = new_member['Age']
+    Email_ID = new_member['Email_ID']
+    Trainer_ID = new_member['Trainer_ID']
+    conn = get_db_conn()
+    conn.execute('INSERT INTO Members (Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Member created'}), 201
+
+@app.route('/members/<int:Mem_ID>', methods=['PUT'])
+def update_member(Mem_ID):
+    update_data = request.get_json()
+    M_Name = update_data['M_Name']
+    Phone = update_data['Phone']
+    Start_Date = update_data['Start_Date']
+    Gender = update_data['Gender']
+    Subs = update_data['Subs']
+    Height = update_data['Height']
+    Weight = update_data['Weight']
+    Age = update_data['Age']
+    Email_ID = update_data['Email_ID']
+    Trainer_ID = update_data['Trainer_ID']
+    conn = get_db_conn()
+    conn.execute('UPDATE Members SET M_Name = ?, Phone = ?, Start_Date = ?, Gender = ?, Subs = ?, Height = ?, Weight = ?, Age = ?, Email_ID = ?, Trainer_ID = ? WHERE Mem_ID = ?', (M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID, Mem_ID))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Member updated'})
+
+@app.route('/members/<int:Mem_ID>', methods=['DELETE'])
+def delete_member(Mem_ID):
+    conn = get_db_conn()
+    conn.execute('DELETE FROM Members WHERE Mem_ID = ?', (Mem_ID,))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Member deleted'})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
