@@ -9,20 +9,25 @@
 
 ### *Start*
 
-#### *Back-End*
+#### *Back-End* 
 
+進入 *backend*
 ```shell
 cd backend
 ```
+安裝需要的套件
 ```shell
 pip install -r requirements.txt
 ```
+建立資料庫
 ```shell
 python db.py
 ```
+執行 *app.py*
 ```shell
 python app.py
 ```
+另外開啟一個Terminal，執行以下指令
 ```shell
 curl "http://localhost:5000"
 ```
