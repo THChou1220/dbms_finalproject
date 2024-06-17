@@ -6,10 +6,23 @@
 
 ### *Pre-Start*
   至 https://sqlite.org/download.html 下載SQLite
-  
-  安裝flask
-  ```shell
-  pip install flask
-  ```
 
 ### *Start*
+
+#### *Back-End*
+
+```shell
+cd backend
+```
+
+```shell
+pip install -r requirements.txt
+```
+
+```shell
+python db.py
+```
+
+```shell
+python app.py
+```
