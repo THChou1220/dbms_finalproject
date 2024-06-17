@@ -103,6 +103,7 @@ def create_member():
     Trainer_ID = new_member['Trainer_ID']
     conn = get_db_conn()
     conn.execute('INSERT INTO Members (Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID))
+    conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num + 1 WHERE Sub_ID = ?', (Subs,))
     conn.commit()
     conn.close()
     return jsonify({'message': 'Member created'}), 201
@@ -121,7 +122,11 @@ def update_member(Mem_ID):
     Email_ID = update_data['Email_ID']
     Trainer_ID = update_data['Trainer_ID']
     conn = get_db_conn()
+    oldSubs = conn.execute('SELECT Subs FROM Members WHERE Mem_ID = ?', (Mem_ID,))
     conn.execute('UPDATE Members SET M_Name = ?, Phone = ?, Start_Date = ?, Gender = ?, Subs = ?, Height = ?, Weight = ?, Age = ?, Email_ID = ?, Trainer_ID = ? WHERE Mem_ID = ?', (M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID, Mem_ID))
+    if oldSubs != Subs:
+        conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num - 1 WHERE Sub_ID = ?', (oldSubs,))
+        conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num + 1 WHERE Sub_ID = (SELECT Subs FROM Members WHERE Mem_ID = ?)', (Mem_ID,))
     conn.commit()
     conn.close()
     return jsonify({'message': 'Member updated'})
@@ -129,6 +134,7 @@ def update_member(Mem_ID):
 @app.route('/members/<int:Mem_ID>', methods=['DELETE'])
 def delete_member(Mem_ID):
     conn = get_db_conn()
+    conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num - 1 WHERE Sub_ID = (SELECT Subs FROM Members WHERE Mem_ID = ?)', (Mem_ID,))
     conn.execute('DELETE FROM Members WHERE Mem_ID = ?', (Mem_ID,))
     conn.commit()
     conn.close()
