@@ -24,6 +24,6 @@ python db.py
 python app.py
 ```
 ```shell
-curl "http://127.0.0.1:5000"
+curl "http://localhost:5000"
 ```
 若 *StatusCode* 為 *200*，且 *Content* 為 *Hello World* 則表示連接成功
