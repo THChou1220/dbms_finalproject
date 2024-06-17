@@ -31,4 +31,4 @@ python app.py
 ```shell
 curl "http://localhost:5000"
 ```
-若 *StatusCode* 為 *200*，且 *Content* 為 *Hello World* 則表示連接成功
+若 *StatusCode* 為 *200*，且 *Content* 為 *Hello World* 則表示成功執行
