@@ -1,7 +1,10 @@
 import sqlite3
 
+import os
+database_path = os.path.join(os.path.dirname(__file__), 'gym.db')
+
 def init_db():
-    conn = sqlite3.connect('gym.db')
+    conn = sqlite3.connect(database_path)
     cursor = conn.cursor()
 
     # Enable foreign key support
@@ -10,7 +13,7 @@ def init_db():
     # Create tables
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Trainers (
-            T_ID INTEGER PRIMARY KEY,
+            T_ID TEXT PRIMARY KEY,
             T_Name TEXT NOT NULL,
             Email_ID TEXT,
             Phone TEXT,
@@ -22,17 +25,17 @@ def init_db():
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Members (
-            Mem_ID INTEGER PRIMARY KEY,
+            Mem_ID TEXT PRIMARY KEY,
             M_Name TEXT NOT NULL,
             Phone TEXT,
             Start_Date TEXT NOT NULL,
             Gender TEXT,
-            Subs INTEGER NOT NULL,
+            Subs TEXT NOT NULL,
             Height REAL,
             Weight REAL,
             Age INTEGER,
             Email_ID TEXT,
-            Trainer_ID INTEGER NOT NULL,
+            Trainer_ID TEXT NOT NULL,
             FOREIGN KEY (Trainer_ID) REFERENCES Trainers(T_ID) ON DELETE CASCADE ON UPDATE CASCADE
             FOREIGN KEY (Subs) REFERENCES Subscriptions(Sub_ID) ON DELETE CASCADE ON UPDATE CASCADE
         )
@@ -40,7 +43,7 @@ def init_db():
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Subscriptions (
-            Sub_ID INTEGER PRIMARY KEY,
+            Sub_ID TEXT PRIMARY KEY,
             Price REAL NOT NULL,
             Duration TEXT NOT NULL,
             Sub_Num INTEGER DEFAULT 0
@@ -49,8 +52,8 @@ def init_db():
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Consist (
-            Sub_Pack INTEGER,
-            Exercise_ID INTEGER,
+            Sub_Pack TEXT,
+            Exercise_ID TEXT,
             PRIMARY KEY (Sub_Pack, Exercise_ID),
             FOREIGN KEY (Sub_Pack) REFERENCES Subscriptions(Sub_ID) ON DELETE CASCADE,
             FOREIGN KEY (Exercise_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
@@ -58,8 +61,8 @@ def init_db():
     ''')
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS Equipment (
-            Eq_ID INTEGER PRIMARY KEY,
+        CREATE TABLE IF NOT EXISTS Equipments (
+            Eq_ID TEXT PRIMARY KEY,
             Name TEXT NOT NULL,
             Quantity INTEGER,
             Cost REAL NOT NULL
@@ -68,17 +71,17 @@ def init_db():
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Use (
-            Member_ID INTEGER,
-            Equipment_ID INTEGER,
+            Member_ID TEXT,
+            Equipment_ID TEXT,
             PRIMARY KEY (Member_ID, Equipment_ID),
             FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE,
-            FOREIGN KEY (Equipment_ID) REFERENCES Equipment(Eq_ID) ON DELETE CASCADE
+            FOREIGN KEY (Equipment_ID) REFERENCES Equipments(Eq_ID) ON DELETE CASCADE
         )
     ''')
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Exercises (
-            EX_ID INTEGER PRIMARY KEY,
+            EX_ID TEXT PRIMARY KEY,
             EX_Name TEXT NOT NULL,
             Type TEXT NOT NULL,
             Time_Slot TEXT NOT NULL,
@@ -88,8 +91,8 @@ def init_db():
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Do (
-            Member_ID INTEGER,
-            EX_ID INTEGER,
+            Member_ID TEXT,
+            EX_ID TEXT,
             PRIMARY KEY (Member_ID, EX_ID),
             FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE,
             FOREIGN KEY (EX_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
