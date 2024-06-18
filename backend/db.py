@@ -48,12 +48,12 @@ def init_db():
     ''')
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS Consists (
+        CREATE TABLE IF NOT EXISTS Consist (
             Sub_Pack INTEGER,
             Exercise_ID INTEGER,
             PRIMARY KEY (Sub_Pack, Exercise_ID),
-            FOREIGN KEY (Sub_Pack) REFERENCES Subscriptions(Sub_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (Exercise_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (Sub_Pack) REFERENCES Subscriptions(Sub_ID) ON DELETE CASCADE,
+            FOREIGN KEY (Exercise_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
         )
     ''')
 
@@ -71,8 +71,8 @@ def init_db():
             Member_ID INTEGER,
             Equipment_ID INTEGER,
             PRIMARY KEY (Member_ID, Equipment_ID),
-            FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (Equipment_ID) REFERENCES Equipment(Eq_ID) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE,
+            FOREIGN KEY (Equipment_ID) REFERENCES Equipment(Eq_ID) ON DELETE CASCADE
         )
     ''')
 
@@ -91,8 +91,8 @@ def init_db():
             Member_ID INTEGER,
             EX_ID INTEGER,
             PRIMARY KEY (Member_ID, EX_ID),
-            FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-            FOREIGN KEY (EX_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE ON UPDATE CASCADE
+            FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE,
+            FOREIGN KEY (EX_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
         )
     ''')
 
