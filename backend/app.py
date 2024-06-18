@@ -69,24 +69,6 @@ def default():
     return "Hello World"
 
 # Trainers' routes
-@app.route('/trainers', methods=['GET'])
-def get_trainers():
-    conn = get_db_conn()
-    trainers = conn.execute('SELECT * FROM Trainers').fetchall()
-    conn.close()
-    
-    return jsonify([dict(trainer) for trainer in trainers])
-
-@app.route('/trainers/<T_ID>', methods=['GET'])
-def get_trainer(T_ID):
-    conn = get_db_conn()
-    trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (T_ID,)).fetchone()
-    conn.close()
-    if trainer is None:
-        return jsonify({'error': 'Trainer not found'}), 404
-    
-    return jsonify(dict(trainer))
-
 @app.route('/trainers', methods=['POST'])
 def create_trainer():
     new_trainer = request.get_json()
@@ -104,6 +86,24 @@ def create_trainer():
     conn.close()
     
     return jsonify({'T_ID': T_ID, 'T_Name': T_Name}), 201
+
+@app.route('/trainers', methods=['GET'])
+def get_trainers():
+    conn = get_db_conn()
+    trainers = conn.execute('SELECT * FROM Trainers').fetchall()
+    conn.close()
+    
+    return jsonify([dict(trainer) for trainer in trainers])
+
+@app.route('/trainers/<T_ID>', methods=['GET'])
+def get_trainer(T_ID):
+    conn = get_db_conn()
+    trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (T_ID,)).fetchone()
+    conn.close()
+    if trainer is None:
+        return jsonify({'error': 'Trainer not found'}), 404
+    
+    return jsonify(dict(trainer))
 
 @app.route('/trainers/<T_ID>', methods=['PUT'])
 def update_trainer(T_ID):
@@ -144,24 +144,6 @@ def delete_trainer(T_ID):
     return jsonify({'message': 'Trainer deleted'})
 
 # Members' routes
-@app.route('/members', methods=['GET'])
-def get_members():
-    conn = get_db_conn()
-    members = conn.execute('SELECT * FROM Members').fetchall()
-    conn.close()
-    
-    return jsonify([dict(member) for member in members])
-
-@app.route('/members/<Mem_ID>', methods=['GET'])
-def get_member(Mem_ID):
-    conn = get_db_conn()
-    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()
-    conn.close()
-    if member is None:
-        return jsonify({'error': 'Member not found'}), 404
-    
-    return jsonify(dict(member))
-
 @app.route('/members', methods=['POST'])
 def create_member():
     new_member = request.get_json()
@@ -184,6 +166,24 @@ def create_member():
     conn.close()
     
     return jsonify({'Mem_ID': Mem_ID, 'M_Name': M_Name}), 201
+
+@app.route('/members', methods=['GET'])
+def get_members():
+    conn = get_db_conn()
+    members = conn.execute('SELECT * FROM Members').fetchall()
+    conn.close()
+    
+    return jsonify([dict(member) for member in members])
+
+@app.route('/members/<Mem_ID>', methods=['GET'])
+def get_member(Mem_ID):
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    
+    return jsonify(dict(member))
 
 @app.route('/members/<Mem_ID>', methods=['PUT'])
 def update_member(Mem_ID):
@@ -245,6 +245,20 @@ def delete_member(Mem_ID):
     return jsonify({'message': 'Member deleted'})
 
 # Subscriptions' routes
+@app.route('/subscriptions', methods=['POST'])
+def create_subscription():
+    new_subscription = request.get_json()
+    Sub_ID = generate_Sub_ID()
+    Price = new_subscription['Price']
+    Duration = new_subscription['Duration']
+    
+    conn = get_db_conn()
+    conn.execute('INSERT INTO Subscriptions (Sub_ID, Price, Duration) VALUES (?, ?, ?)', (Sub_ID, Price, Duration))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'Sub_ID': Sub_ID}), 201
+
 @app.route('/subscriptions', methods=['GET'])
 def get_subscriptions():
     conn = get_db_conn()
@@ -262,20 +276,6 @@ def get_subscription(Sub_ID):
         return jsonify({'error': 'Subscription not found'}), 404
     
     return jsonify(dict(subscription))
-
-@app.route('/subscriptions', methods=['POST'])
-def create_subscription():
-    new_subscription = request.get_json()
-    Sub_ID = generate_Sub_ID()
-    Price = new_subscription['Price']
-    Duration = new_subscription['Duration']
-    
-    conn = get_db_conn()
-    conn.execute('INSERT INTO Subscriptions (Sub_ID, Price, Duration) VALUES (?, ?, ?)', (Sub_ID, Price, Duration))
-    conn.commit()
-    conn.close()
-    
-    return jsonify({'Sub_ID': Sub_ID}), 201
 
 @app.route('/subscriptions/<Sub_ID>', methods=['PUT'])
 def update_subscription(Sub_ID):
@@ -312,6 +312,21 @@ def delete_subscription(Sub_ID):
     return jsonify({'message': 'Subscription deleted'})
 
 # Equipments' routes
+@app.route('/equipments', methods=['POST'])
+def create_equipment():
+    new_equipment = request.get_json()
+    Eq_ID = generate_Eq_ID()
+    Name = new_equipment['Name']
+    Quantity = new_equipment['Quantity']
+    Cost = new_equipment['Cost']
+    
+    conn = get_db_conn()
+    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Quantity, Cost) VALUES (?, ?, ?, ?)', (Eq_ID, Name, Quantity, Cost))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'Eq_ID': Eq_ID}), 201
+
 @app.route('/equipments', methods=['GET'])
 def get_equipments():
     conn = get_db_conn()
@@ -329,21 +344,6 @@ def get_equipment(Eq_ID):
         return jsonify({'error': 'Equipment not found'}), 404
     
     return jsonify(dict(equipment))
-
-@app.route('/equipments', methods=['POST'])
-def create_equipment():
-    new_equipment = request.get_json()
-    Eq_ID = generate_Eq_ID()
-    Name = new_equipment['Name']
-    Quantity = new_equipment['Quantity']
-    Cost = new_equipment['Cost']
-    
-    conn = get_db_conn()
-    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Quantity, Cost) VALUES (?, ?, ?, ?)', (Eq_ID, Name, Quantity, Cost))
-    conn.commit()
-    conn.close()
-    
-    return jsonify({'Eq_ID': Eq_ID}), 201
 
 @app.route('/equipments/<Eq_ID>', methods=['PUT'])
 def update_equipment(Eq_ID):
@@ -381,6 +381,22 @@ def delete_equipment(Eq_ID):
     return jsonify({'message': 'Equipment deleted'})
 
 # Exercises' routes
+@app.route('/exercises', methods=['POST'])
+def create_exercise():
+    new_exercise = request.get_json()
+    EX_ID = generate_EX_ID()
+    EX_Name = new_exercise['EX_Name']
+    Type = new_exercise['Type']
+    Time_Slot = new_exercise['Time_Slot']
+    Frequency = new_exercise['Frequency']
+    
+    conn = get_db_conn()
+    conn.execute('INSERT INTO Exercises (EX_ID, EX_Name, Type, Time_Slot, Frequency) VALUES (?, ?, ?, ?, ?)', (EX_ID, EX_Name, Type, Time_Slot, Frequency))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'EX_ID': EX_ID}), 201
+
 @app.route('/exercises', methods=['GET'])
 def get_exercises():
     conn = get_db_conn()
@@ -398,22 +414,6 @@ def get_exercise(EX_ID):
         return jsonify({'error': 'Exercise not found'}), 404
     
     return jsonify(dict(exercise))
-
-@app.route('/exercises', methods=['POST'])
-def create_exercise():
-    new_exercise = request.get_json()
-    EX_ID = generate_EX_ID()
-    EX_Name = new_exercise['EX_Name']
-    Type = new_exercise['Type']
-    Time_Slot = new_exercise['Time_Slot']
-    Frequency = new_exercise['Frequency']
-    
-    conn = get_db_conn()
-    conn.execute('INSERT INTO Exercises (EX_ID, EX_Name, Type, Time_Slot, Frequency) VALUES (?, ?, ?, ?, ?)', (EX_ID, EX_Name, Type, Time_Slot, Frequency))
-    conn.commit()
-    conn.close()
-    
-    return jsonify({'EX_ID': EX_ID}), 201
 
 @app.route('/exercises/<EX_ID>', methods=['PUT'])
 def update_exercise(EX_ID):
