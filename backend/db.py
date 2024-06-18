@@ -84,8 +84,8 @@ def init_db():
             EX_ID TEXT PRIMARY KEY,
             EX_Name TEXT NOT NULL,
             Type TEXT NOT NULL,
-            Time_Slot TEXT NOT NULL,
-            Frequency TEXT NOT NULL
+            Time_Slot INTEGER NOT NULL,
+            Frequency INTEGER NOT NULL
         )
     ''')
 

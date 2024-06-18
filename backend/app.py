@@ -403,7 +403,7 @@ def get_exercise(EX_ID):
 def create_exercise():
     new_exercise = request.get_json()
     EX_ID = generate_EX_ID()
-    EX_Name = new_exercise['Ex_Name']
+    EX_Name = new_exercise['EX_Name']
     Type = new_exercise['Type']
     Time_Slot = new_exercise['Time_Slot']
     Frequency = new_exercise['Frequency']
@@ -422,13 +422,15 @@ def update_exercise(EX_ID):
     conn.close()
     if exercise is None:
         return jsonify({'error': 'Exercise not found'}), 404
+    
     update_data = request.get_json()
-    EX_Name = update_data['Ex_Name']
+    EX_Name = update_data['EX_Name']
     Type = update_data['Type']
     Time_Slot = update_data['Time_Slot']
     Frequency = update_data['Frequency']
+    
     conn = get_db_conn()
-    conn.execute('UPDATE Equipments SET EX_Name = ?, Type = ?, Time_Slot = ?, Frequency = ? WHERE EX_ID = ?', (EX_Name, Type, Time_Slot, Frequency, EX_ID))
+    conn.execute('UPDATE Exercises SET EX_Name = ?, Type = ?, Time_Slot = ?, Frequency = ? WHERE EX_ID = ?', (EX_Name, Type, Time_Slot, Frequency, EX_ID))
     conn.commit()
     conn.close()
     return jsonify({'message': 'Exercise updated'})
