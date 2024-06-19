@@ -14,14 +14,28 @@ trainers = [
         "T_Name": "Test2",
         "Email_ID": "test2@test.com",
         "Phone": "0900-000-002",
-        "Gender": "Male",
+        "Gender": "Female",
         "Salary": 50000
     },
     {
         "T_Name": "Test3",
         "Email_ID": "test3@test.com",
         "Phone": "0900-000-003",
+        "Gender": "Male",
+        "Salary": 50000
+    },
+    {
+        "T_Name": "Test4",
+        "Email_ID": "test4@test.com",
+        "Phone": "0900-000-004",
         "Gender": "Female",
+        "Salary": 50000
+    },
+    {
+        "T_Name": "Test5",
+        "Email_ID": "test5@test.com",
+        "Phone": "0900-000-005",
+        "Gender": "Male",
         "Salary": 50000
     }
 ]
@@ -29,9 +43,10 @@ trainers = [
 def create_trainer(trainer):
     response = requests.post(trainer_url, json=trainer)
     if response.status_code == 201:
-        print("Create trainer successfully")
+        result = response.json()
+        print(result)
     else:
-        print("Failed to create trainer")
+        print("Failed to create trainer.")
 
 for trainer in trainers:
     create_trainer(trainer)
@@ -45,20 +60,29 @@ subscriptions = [
     },
     {
         "Price": 2800,
-        "Duration": 1
+        "Duration": 2
     },
     {
         "Price": 4000,
         "Duration": 3
+    },
+    {
+        "Price": 7000,
+        "Duration": 6
+    },
+    {
+        "Price": 11000,
+        "Duration": 12
     }
 ]
 
 def create_subscription(subscription):
     response = requests.post(subscription_url, json=subscription)
     if response.status_code == 201:
-        print("Create subscription successfully")
+        result = response.json()
+        print(result)
     else:
-        print("Failed to create subscription")
+        print("Failed to create subscription.")
 
 for subscription in subscriptions:
     create_subscription(subscription)
@@ -69,26 +93,37 @@ equipments = [
     {
         "Name": "Treadmill",
         "Quantity": 5,
-        "Cost": 10000
+        "Cost": 25000
     },
     {
         "Name": "Spinning Bike",
         "Quantity": 5,
-        "Cost": 8000
+        "Cost": 20000
     },
     {
-        "Name": "Dumbbell",
+        "Name": "Dumbbell Set",
         "Quantity": 5,
-        "Cost": 5000
+        "Cost": 15000
+    },
+    {
+        "Name": "Leg Press Machine",
+        "Quantity": 5,
+        "Cost": 35000
+    },
+    {
+        "Name": "Lat Pulldown Machine",
+        "Quantity": 5,
+        "Cost": 50000
     }
 ]
 
 def create_equipment(equipment):
     response = requests.post(equipment_url, json=equipment)
     if response.status_code == 201:
-        print("Create equipment successfully")
+        result = response.json()
+        print(result)
     else:
-        print("Failed to create equipment")
+        print("Failed to create equipment.")
 
 for equipment in equipments:
     create_equipment(equipment)
@@ -113,15 +148,28 @@ exercises = [
         "Type": "Lower Body",
         "Time_Slot": 3,
         "Frequency": 5
+    },
+    {
+        "EX_Name": "Push Up",
+        "Type": "Upper Body",
+        "Time_Slot": 3,
+        "Frequency": 5
+    },
+    {
+        "EX_Name": "Lunge",
+        "Type": "Lower Body",
+        "Time_Slot": 3,
+        "Frequency": 5
     }
 ]
 
 def create_exercise(exercise):
     response = requests.post(exercise_url, json=exercise)
     if response.status_code == 201:
-        print("Create exercise successfully")
+        result = response.json()
+        print(result)
     else:
-        print("Failed to create exercise")
+        print("Failed to create exercise.")
 
 for exercise in exercises:
     create_exercise(exercise)

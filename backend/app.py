@@ -247,7 +247,7 @@ def create_subscription():
     conn.commit()
     conn.close()
     
-    return jsonify({'Sub_ID': Sub_ID}), 201
+    return jsonify({'Sub_ID': Sub_ID, 'Duration': Duration, 'Price': Price}), 201
 
 def generate_Sub_ID():
     conn = get_db_conn()
@@ -325,7 +325,7 @@ def create_equipment():
     conn.commit()
     conn.close()
     
-    return jsonify({'Eq_ID': Eq_ID}), 201
+    return jsonify({'Eq_ID': Eq_ID, 'Name': Name}), 201
 
 def generate_Eq_ID():
     conn = get_db_conn()
@@ -405,7 +405,7 @@ def create_exercise():
     conn.commit()
     conn.close()
     
-    return jsonify({'EX_ID': EX_ID}), 201
+    return jsonify({'EX_ID': EX_ID, 'EX_Name': EX_Name}), 201
 
 def generate_EX_ID():
     conn = get_db_conn()
