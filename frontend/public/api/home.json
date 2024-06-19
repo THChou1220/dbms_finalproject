@@ -1,0 +1,42 @@
+{
+  "success": true,
+  "data": {
+    "topiclist": [{
+      "id": 1,
+      "title": "title1",
+      "imgurl": "https://i.ytimg.com/vi/6OdRIOi7fck/hq720.jpg?sqp=-…RhlIFMoSjAP&rs=AOn4CLDxx7qZhMsqLkzKvN4KmfmGREPZMg",
+      "alt": ""
+    }, {
+      "id": 2,
+      "title": "title2",
+      "imgurl": "https://i.ytimg.com/vi/SlxXhlpYc_E/hq720.jpg?sqp=-…AFwAcABBg==&rs=AOn4CLAC4mUjW1OG34dFeFK_3J9S2EYOLw",
+      "alt": ""
+    }],
+    "articlelist": [{
+      "id": 1,
+      "title": "title1",
+      "desc": "desc1",
+      "imgurl": "https://i.ytimg.com/vi/SlxXhlpYc_E/hq720.jpg?sqp=-…AFwAcABBg==&rs=AOn4CLAC4mUjW1OG34dFeFK_3J9S2EYOLw",
+      "alt": ""
+    },{
+      "id": 2,
+      "title": "title2",
+      "desc": "desc2",
+      "imgurl": "https://i.ytimg.com/vi/SlxXhlpYc_E/hq720.jpg?sqp=-…AFwAcABBg==&rs=AOn4CLAC4mUjW1OG34dFeFK_3J9S2EYOLw",
+      "alt": ""
+    },{
+      "id": 3,
+      "title": "title3",
+      "desc": "desc3",
+      "imgurl": "https://i.ytimg.com/vi/SlxXhlpYc_E/hq720.jpg?sqp=-…AFwAcABBg==&rs=AOn4CLAC4mUjW1OG34dFeFK_3J9S2EYOLw",
+      "alt": ""
+    }],
+    "recommendlist":[{
+      "id": 1,
+      "imgurl": "https://i.ytimg.com/vi/b_aeJOeyMQo/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBM5lxjygYaSp4ke8WAwhfFqAqRfA"
+    },{
+      "id": 2,
+      "imgurl": "https://i.ytimg.com/vi/tKG7hOBpR1k/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAajdemxrYBC5hOXENE5mKX68MFLA"
+    }]
+  }
+}
