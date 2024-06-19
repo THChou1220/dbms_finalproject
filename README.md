@@ -32,3 +32,9 @@ python app.py
 curl "http://localhost:5000"
 ```
 若 *StatusCode* 為 *200*，且 *Content* 為 *Hello World* 則表示成功執行
+
+在另外開啟的 *Terminal* 下進入 *backend*，執行以下指令
+```shell
+python data.py
+```
+即能將預先設定好的資料輸入進資料庫中
