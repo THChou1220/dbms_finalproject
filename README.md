@@ -2,7 +2,7 @@
 
 ## 題目: 健身房會員管理系統
    Database: **SQLite** <br>
-   Back-End Framework: **flask**
+   Back-End Framework: **Python - Flask**
 
 ### *Pre-Start*
   至 https://sqlite.org/download.html 下載SQLite
