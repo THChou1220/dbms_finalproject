@@ -16,7 +16,7 @@ def get_db_conn():
 from datetime import datetime
 import pytz
 
-def get_cur_date():
+def get_cur_Taiwan_date():
     now = datetime.now()
     tz = pytz.timezone('Asia/Taipei')
     taiwan_time = now.astimezone(tz)
@@ -37,7 +37,7 @@ def create_trainer():
     Email_ID = new_trainer['Email_ID']
     Phone = new_trainer['Phone']
     Gender = new_trainer['Gender']
-    Hire_Date = get_cur_date()
+    Hire_Date = get_cur_Taiwan_date()
     Salary = new_trainer['Salary']
     
     conn = get_db_conn()
@@ -119,7 +119,7 @@ def create_member():
     Mem_ID = generate_Mem_ID()
     M_Name = new_member['M_Name']
     Phone = new_member['Phone']
-    Start_Date = get_cur_date()
+    Start_Date = get_cur_Taiwan_date()
     Gender = new_member['Gender']
     Subs = new_member['Subs']
     Height = new_member['Height']
@@ -209,7 +209,7 @@ def update_member(Mem_ID):
     
     conn = get_db_conn()
     oldSubs = conn.execute('SELECT Subs FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()[0]
-    conn.execute('UPDATE Members SET M_Name = ?, Phone = ?, Start_Date = ?, Gender = ?, Subs = ?, Height = ?, Weight = ?, Age = ?, Email_ID = ?, Trainer_ID = ? WHERE Mem_ID = ?', (M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID, Mem_ID))
+    conn.execute('UPDATE Members SET M_Name = ?, Phone = ?, Gender = ?, Subs = ?, Height = ?, Weight = ?, Age = ?, Email_ID = ?, Trainer_ID = ? WHERE Mem_ID = ?', (M_Name, Phone, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID, Mem_ID))
     if oldSubs != Subs:
         conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num - 1 WHERE Sub_ID = ?', (oldSubs,))
         conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num + 1 WHERE Sub_ID = ?', (Subs,))
