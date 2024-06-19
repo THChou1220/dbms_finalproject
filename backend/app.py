@@ -13,56 +13,6 @@ def get_db_conn():
     conn.row_factory = sqlite3.Row
     return conn
 
-def generate_T_ID():
-    conn = get_db_conn()
-    cursor = conn.cursor()
-    while True:
-        T_ID = 'Tr' + ''.join(random.choice(string.digits) for _ in range(8))
-        cursor.execute('SELECT 1 FROM Trainers WHERE T_ID = ?', (T_ID,))
-        if cursor.fetchone() is None:
-            conn.close()
-            return T_ID
-        
-def generate_Mem_ID():
-    conn = get_db_conn()
-    cursor = conn.cursor()
-    while True:
-        Mem_ID = 'Me' + ''.join(random.choice(string.digits) for _ in range(8))
-        cursor.execute('SELECT 1 FROM Members WHERE Mem_ID = ?', (Mem_ID,))
-        if cursor.fetchone() is None:
-            conn.close()
-            return Mem_ID
-
-def generate_Sub_ID():
-    conn = get_db_conn()
-    cursor = conn.cursor()
-    while True:
-        Sub_ID = 'Su' + ''.join(random.choice(string.digits) for _ in range(8))
-        cursor.execute('SELECT 1 FROM Subscriptions WHERE Sub_ID = ?', (Sub_ID,))
-        if cursor.fetchone() is None:
-            conn.close()
-            return Sub_ID
-
-def generate_Eq_ID():
-    conn = get_db_conn()
-    cursor = conn.cursor()
-    while True:
-        Eq_ID = 'Eq' + ''.join(random.choice(string.digits) for _ in range(8))
-        cursor.execute('SELECT 1 FROM Equipments WHERE Eq_ID = ?', (Eq_ID,))
-        if cursor.fetchone() is None:
-            conn.close()
-            return Eq_ID
-
-def generate_EX_ID():
-    conn = get_db_conn()
-    cursor = conn.cursor()
-    while True:
-        EX_ID = 'Ex' + ''.join(random.choice(string.digits) for _ in range(8))
-        cursor.execute('SELECT 1 FROM Exercises WHERE EX_ID = ?', (EX_ID,))
-        if cursor.fetchone() is None:
-            conn.close()
-            return EX_ID
-
 # Default route
 @app.route('/', methods=['GET'])
 def default():
@@ -86,6 +36,16 @@ def create_trainer():
     conn.close()
     
     return jsonify({'T_ID': T_ID, 'T_Name': T_Name}), 201
+
+def generate_T_ID():
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    while True:
+        T_ID = 'Tr' + ''.join(random.choice(string.digits) for _ in range(8))
+        cursor.execute('SELECT 1 FROM Trainers WHERE T_ID = ?', (T_ID,))
+        if cursor.fetchone() is None:
+            conn.close()
+            return T_ID
 
 @app.route('/trainers', methods=['GET'])
 def get_trainers():
@@ -160,12 +120,34 @@ def create_member():
     Trainer_ID = new_member['Trainer_ID']
     
     conn = get_db_conn()
+    subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
+    conn.close()
+    if subscription is None:
+        return jsonify({'error': 'Subscription not found'}), 404
+    
+    conn = get_db_conn()
+    trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (Trainer_ID,)).fetchone()
+    conn.close()
+    if trainer is None:
+        return jsonify({'error': 'Trainer not found'}), 404
+    
+    conn = get_db_conn()
     conn.execute('INSERT INTO Members (Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', (Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID))
     conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num + 1 WHERE Sub_ID = ?', (Subs,))
     conn.commit()
     conn.close()
     
     return jsonify({'Mem_ID': Mem_ID, 'M_Name': M_Name}), 201
+
+def generate_Mem_ID():
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    while True:
+        Mem_ID = 'Me' + ''.join(random.choice(string.digits) for _ in range(8))
+        cursor.execute('SELECT 1 FROM Members WHERE Mem_ID = ?', (Mem_ID,))
+        if cursor.fetchone() is None:
+            conn.close()
+            return Mem_ID
 
 @app.route('/members', methods=['GET'])
 def get_members():
@@ -259,6 +241,16 @@ def create_subscription():
     
     return jsonify({'Sub_ID': Sub_ID}), 201
 
+def generate_Sub_ID():
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    while True:
+        Sub_ID = 'Su' + ''.join(random.choice(string.digits) for _ in range(8))
+        cursor.execute('SELECT 1 FROM Subscriptions WHERE Sub_ID = ?', (Sub_ID,))
+        if cursor.fetchone() is None:
+            conn.close()
+            return Sub_ID
+
 @app.route('/subscriptions', methods=['GET'])
 def get_subscriptions():
     conn = get_db_conn()
@@ -326,6 +318,16 @@ def create_equipment():
     conn.close()
     
     return jsonify({'Eq_ID': Eq_ID}), 201
+
+def generate_Eq_ID():
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    while True:
+        Eq_ID = 'Eq' + ''.join(random.choice(string.digits) for _ in range(8))
+        cursor.execute('SELECT 1 FROM Equipments WHERE Eq_ID = ?', (Eq_ID,))
+        if cursor.fetchone() is None:
+            conn.close()
+            return Eq_ID
 
 @app.route('/equipments', methods=['GET'])
 def get_equipments():
@@ -396,6 +398,16 @@ def create_exercise():
     conn.close()
     
     return jsonify({'EX_ID': EX_ID}), 201
+
+def generate_EX_ID():
+    conn = get_db_conn()
+    cursor = conn.cursor()
+    while True:
+        EX_ID = 'Ex' + ''.join(random.choice(string.digits) for _ in range(8))
+        cursor.execute('SELECT 1 FROM Exercises WHERE EX_ID = ?', (EX_ID,))
+        if cursor.fetchone() is None:
+            conn.close()
+            return EX_ID
 
 @app.route('/exercises', methods=['GET'])
 def get_exercises():
