@@ -2,7 +2,8 @@
 
 ## 題目: 健身房會員管理系統
    Database: **SQLite** <br>
-   Back-End Framework: **Python - Flask**
+   Back-End Framework: **Python - Flask** <br>
+   Front-End Framework: **JavaScript - React**
 
 ### *Pre-Start*
   至 https://sqlite.org/download.html 下載SQLite
@@ -38,3 +39,17 @@ curl "http://localhost:5000"
 python data.py
 ```
 即能將預先設定好的資料輸入進資料庫中。
+
+#### 啟動 *Front-End*
+進入 *frontend*:
+```shell
+cd frontend
+```
+安裝需要的套件:
+```shell
+npm i
+```
+啟動:
+```shell
+npm start
+```
