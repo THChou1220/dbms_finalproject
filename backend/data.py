@@ -7,24 +7,21 @@ trainers = [
         "T_Name": "Test1",
         "Email_ID": "test1@test.com",
         "Phone": "0900-000-001",
-        "Gender": "M",
-        "Hire_Date": "2024-01-01",
+        "Gender": "Male",
         "Salary": 50000
     },
     {
         "T_Name": "Test2",
         "Email_ID": "test2@test.com",
         "Phone": "0900-000-002",
-        "Gender": "M",
-        "Hire_Date": "2024-01-01",
+        "Gender": "Male",
         "Salary": 50000
     },
     {
         "T_Name": "Test3",
         "Email_ID": "test3@test.com",
         "Phone": "0900-000-003",
-        "Gender": "F",
-        "Hire_Date": "2024-01-01",
+        "Gender": "Female",
         "Salary": 50000
     }
 ]

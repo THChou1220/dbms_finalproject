@@ -13,6 +13,16 @@ def get_db_conn():
     conn.row_factory = sqlite3.Row
     return conn
 
+from datetime import datetime
+import pytz
+
+def get_cur_date():
+    now = datetime.now()
+    tz = pytz.timezone('Asia/Taipei')
+    taiwan_time = now.astimezone(tz)
+    formatted_date = taiwan_time.strftime('%Y-%m-%d')
+    return formatted_date
+
 # Default route
 @app.route('/', methods=['GET'])
 def default():
@@ -27,7 +37,7 @@ def create_trainer():
     Email_ID = new_trainer['Email_ID']
     Phone = new_trainer['Phone']
     Gender = new_trainer['Gender']
-    Hire_Date = new_trainer['Hire_Date']
+    Hire_Date = get_cur_date()
     Salary = new_trainer['Salary']
     
     conn = get_db_conn()
@@ -78,11 +88,10 @@ def update_trainer(T_ID):
     Email_ID = update_data['Email_ID']
     Phone = update_data['Phone']
     Gender = update_data['Gender']
-    Hire_Date = update_data['Hire_Date']
     Salary = update_data['Salary']
     
     conn = get_db_conn()
-    conn.execute('UPDATE Trainers SET T_Name = ?, Email_ID = ?, Phone = ?, Gender = ?, Hire_Date = ?, Salary = ? WHERE T_ID = ?', (T_Name, Email_ID, Phone, Gender, Hire_Date, Salary, T_ID))
+    conn.execute('UPDATE Trainers SET T_Name = ?, Email_ID = ?, Phone = ?, Gender = ?, Salary = ? WHERE T_ID = ?', (T_Name, Email_ID, Phone, Gender, Salary, T_ID))
     conn.commit()
     conn.close()
     
@@ -110,7 +119,7 @@ def create_member():
     Mem_ID = generate_Mem_ID()
     M_Name = new_member['M_Name']
     Phone = new_member['Phone']
-    Start_Date = new_member['Start_Date']
+    Start_Date = get_cur_date()
     Gender = new_member['Gender']
     Subs = new_member['Subs']
     Height = new_member['Height']
@@ -178,7 +187,6 @@ def update_member(Mem_ID):
     update_data = request.get_json()
     M_Name = update_data['M_Name']
     Phone = update_data['Phone']
-    Start_Date = update_data['Start_Date']
     Gender = update_data['Gender']
     Subs = update_data['Subs']
     Height = update_data['Height']
