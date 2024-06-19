@@ -17,7 +17,7 @@ cd backend
 ```
 安裝需要的套件
 ```shell
-pip install -r requirements.txt
+pip install -r requirements.txt --user
 ```
 建立資料庫
 ```shell
