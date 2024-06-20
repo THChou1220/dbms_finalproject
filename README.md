@@ -1,9 +1,9 @@
 # dbms_finalproject
 
 ## 題目: 健身房會員管理系統
-   Database: **SQLite** <br>
-   Back-End Framework: **Python - Flask** <br>
-   Front-End Framework: **JavaScript - React**
+Database: **SQLite** <br>
+Back-End Framework: **Python - Flask** <br>
+Front-End Framework: **JavaScript - React**
 
 ### *Pre-Start*
   至 https://sqlite.org/download.html 下載SQLite
@@ -68,3 +68,81 @@ npm install
 ```shell
 npm start
 ```
+
+### *Database*
+- ***Trainers***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| **T_ID** | Text | Primary key |
+| T_Name | Text | Not null |
+| Email_ID | Text |  |
+| Phone | Text | xxxx-xxx-xxx |
+| Gender | Text |  |
+| Hire_Date | Text | Not null |
+| Salary | Real | Not null <br> At least 50000 |
+
+- ***Members***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| **Mem_ID** | Text | Primary key |
+| M_Name | Text | Not null |
+| Phone | Text |  |
+| Start_Date | Text | Not null |
+| Gender | Text |  |
+| *Subs* | Text | Foreign key <br> Not null |
+| Height | Real |  |
+| Weight | Real |  |
+| Age | Integer |  |
+| Email_ID | Text |  |
+| *Trainer_ID* | Text | Foreign key <br> Not null |
+
+- ***Subscriptions***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| **Sub_ID** | Text | Primary key |
+| Price | Real | Not null |
+| Duration | Integer | Not null |
+| Sub_Num | Integer | Default 0 |
+
+- ***Equipments***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| **Eq_ID** | Text | Primary key |
+| Name | Text | Not null |
+| Quantity | Integer | Default 10 <br> Domain: 10 to 1 |
+| Cost | Real | Not null |
+
+- ***Exercises***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| **EX_ID** | Text | Primary key |
+| EX_Name | Text | Not null |
+| Type | Text | Not null <br> Domain: Upper Body, Lower Body, Arm |
+| Time_Slot | Integer | Not null |
+| Frequency | Integer | Not null |
+
+- ***Use***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| ***Member_ID*** | Text | Primary key <br> Foreign key |
+| ***Equipment_ID*** | Text | Primary key <br> Foreign key |
+
+- ***Do***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| ***Member_ID*** | Text | Primary key <br> Foreign key |
+| ***Exercise_ID*** | Text | Primary key <br> Foreign key |
+
+- ***Consist***
+
+| Atrribute | Type | |
+| :--- | :--- | :--- |
+| ***Sub_Pack*** | Text | Primary key <br> Foreign key |
+| ***Exercise_ID*** | Text | Primary key <br> Foreign key |
