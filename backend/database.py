@@ -19,7 +19,7 @@ def init_db():
             Phone TEXT,
             Gender TEXT,
             Hire_Date TEXT NOT NULL,
-            Salary REAL NOT NULL
+            Salary REAL NOT NULL CHECK (Salary >= 50000)
         )
     ''')
 
@@ -45,7 +45,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Subscriptions (
             Sub_ID TEXT PRIMARY KEY,
             Price REAL NOT NULL,
-            Duration REAL NOT NULL,
+            Duration INTEGER NOT NULL,
             Sub_Num INTEGER DEFAULT 0
         )
     ''')
@@ -64,7 +64,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Equipments (
             Eq_ID TEXT PRIMARY KEY,
             Name TEXT NOT NULL,
-            Quantity INTEGER,
+            Quantity INTEGER DEFAULT 10 CHECK (Quantity <= 10 AND Quantity >= 1),
             Cost REAL NOT NULL
         )
     ''')
@@ -83,7 +83,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Exercises (
             EX_ID TEXT PRIMARY KEY,
             EX_Name TEXT NOT NULL,
-            Type TEXT NOT NULL,
+            Type TEXT NOT NULL CHECK (Type IN ('Upper Body', 'Lower Body', 'Arm')),
             Time_Slot INTEGER NOT NULL,
             Frequency INTEGER NOT NULL
         )
@@ -92,10 +92,10 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Do (
             Member_ID TEXT,
-            EX_ID TEXT,
-            PRIMARY KEY (Member_ID, EX_ID),
+            Exercise_ID TEXT,
+            PRIMARY KEY (Member_ID, Exercise_ID),
             FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE,
-            FOREIGN KEY (EX_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
+            FOREIGN KEY (Exercise_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
         )
     ''')
 
