@@ -41,6 +41,16 @@ def create_trainer():
     Hire_Date = get_cur_Taiwan_date()
     Salary = new_trainer['Salary']
     
+    if not new_trainer['T_Name'] or new_trainer['T_Name'] == "":
+        return jsonify({'error': 'T_Name cannot be empty'}), 500
+    
+    try:
+        Salary = float(new_trainer['Salary'])
+        if Salary < 50000:
+            return jsonify({'error': 'Salary must be at least 50000'}), 500
+    except ValueError:
+        return jsonify({'error': 'Salary must be a numeric value'}), 500
+    
     conn = get_db_conn()
     conn.execute('INSERT INTO Trainers (T_ID, T_Name, Email_ID, Phone, Gender, Hire_Date, Salary) VALUES (?, ?, ?, ?, ?, ?, ?)', (T_ID, T_Name, Email_ID, Phone, Gender, Hire_Date, Salary))
     conn.commit()
@@ -76,6 +86,20 @@ def get_trainer(T_ID):
     
     return jsonify(dict(trainer))
 
+@app.route('/trainers/<T_ID>/members', methods=['GET'])
+def get_members_of_trainer(T_ID):
+    conn = get_db_conn()
+    trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (T_ID,)).fetchone()
+    conn.close()
+    if trainer is None:
+        return jsonify({'error': 'Trainer not found'}), 404
+    
+    conn = get_db_conn()
+    members = conn.execute('SELECT Members.Mem_ID as Member_ID, Members.M_Name as Member_Name FROM Trainers JOIN Members ON Trainers.T_ID = Members.Trainer_ID WHERE T_ID = ?', (T_ID,)).fetchall()
+    conn.close()
+    
+    return jsonify([dict(member) for member in members])
+
 @app.route('/trainers/<T_ID>', methods=['PUT'])
 def update_trainer(T_ID):
     conn = get_db_conn()
@@ -90,6 +114,16 @@ def update_trainer(T_ID):
     Phone = update_data['Phone']
     Gender = update_data['Gender']
     Salary = update_data['Salary']
+    
+    if not update_data['T_Name'] or update_data['T_Name'] == "":
+        return jsonify({'error': 'T_Name cannot be empty'}), 500
+    
+    try:
+        Salary = float(update_data['Salary'])
+        if Salary < 50000:
+            return jsonify({'error': 'Salary must be at least 50000'}), 500
+    except ValueError:
+        return jsonify({'error': 'Salary must be a numeric value'}), 500
     
     conn = get_db_conn()
     conn.execute('UPDATE Trainers SET T_Name = ?, Email_ID = ?, Phone = ?, Gender = ?, Salary = ? WHERE T_ID = ?', (T_Name, Email_ID, Phone, Gender, Salary, T_ID))
@@ -129,6 +163,9 @@ def create_member():
     Age = new_member['Age']
     Email_ID = new_member['Email_ID']
     Trainer_ID = new_member['Trainer_ID']
+    
+    if not new_member['M_Name'] or new_member['M_Name'] == "":
+        return jsonify({'error': 'M_Name cannot be empty'}), 500
     
     conn = get_db_conn()
     subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
@@ -197,6 +234,9 @@ def update_member(Mem_ID):
     Email_ID = update_data['Email_ID']
     Trainer_ID = update_data['Trainer_ID']
     
+    if not update_data['M_Name'] or update_data['M_Name'] == "":
+        return jsonify({'error': 'M_Name cannot be empty'}), 500
+    
     conn = get_db_conn()
     subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
     conn.close()
@@ -229,7 +269,8 @@ def delete_member(Mem_ID):
         return jsonify({'error': 'Member not found'}), 404
     
     conn = get_db_conn()
-    conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num - 1 WHERE Sub_ID = (SELECT Subs FROM Members WHERE Mem_ID = ?)', (Mem_ID,))
+    Subs = conn.execute('SELECT Subs FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()[0]
+    conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num - 1 WHERE Sub_ID = ?', (Subs,))
     conn.execute('DELETE FROM Members WHERE Mem_ID = ?', (Mem_ID,))
     conn.commit()
     conn.close()

@@ -19,7 +19,7 @@ def init_db():
             Phone TEXT,
             Gender TEXT,
             Hire_Date TEXT NOT NULL,
-            Salary REAL NOT NULL
+            Salary REAL NOT NULL CHECK (Salary >= 50000)
         )
     ''')
 
