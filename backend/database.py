@@ -45,7 +45,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Subscriptions (
             Sub_ID TEXT PRIMARY KEY,
             Price REAL NOT NULL,
-            Duration REAL NOT NULL,
+            Duration INTEGER NOT NULL,
             Sub_Num INTEGER DEFAULT 0
         )
     ''')
@@ -92,10 +92,10 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Do (
             Member_ID TEXT,
-            EX_ID TEXT,
-            PRIMARY KEY (Member_ID, EX_ID),
+            Exercise_ID TEXT,
+            PRIMARY KEY (Member_ID, Exercise_ID),
             FOREIGN KEY (Member_ID) REFERENCES Members(Mem_ID) ON DELETE CASCADE,
-            FOREIGN KEY (EX_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
+            FOREIGN KEY (Exercise_ID) REFERENCES Exercises(EX_ID) ON DELETE CASCADE
         )
     ''')
 

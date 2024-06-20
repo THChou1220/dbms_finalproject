@@ -28,6 +28,7 @@ def get_cur_Taiwan_date():
 def default():
     return "Hello World"
 
+
 # Trainers' routes
 @app.route('/trainers', methods=['POST'])
 def create_trainer():
@@ -111,6 +112,7 @@ def delete_trainer(T_ID):
     conn.close()
     
     return jsonify({'message': 'Trainer deleted'})
+
 
 # Members' routes
 @app.route('/members', methods=['POST'])
@@ -234,6 +236,7 @@ def delete_member(Mem_ID):
     
     return jsonify({'message': 'Member deleted'})
 
+
 # Subscriptions' routes
 @app.route('/subscriptions', methods=['POST'])
 def create_subscription():
@@ -310,6 +313,7 @@ def delete_subscription(Sub_ID):
     conn.close()
     
     return jsonify({'message': 'Subscription deleted'})
+
 
 # Equipments' routes
 @app.route('/equipments', methods=['POST'])
@@ -390,6 +394,7 @@ def delete_equipment(Eq_ID):
     
     return jsonify({'message': 'Equipment deleted'})
 
+
 # Exercises' routes
 @app.route('/exercises', methods=['POST'])
 def create_exercise():
@@ -469,6 +474,204 @@ def delete_exercise(EX_ID):
     conn.close()
     
     return jsonify({'message': 'Exercise deleted'})
+
+
+# routes of Use
+@app.route('/use', methods=['POST'])
+def create_use():
+    new_use = request.get_json()
+    Member_ID = new_use['Member_ID']
+    Equipment_ID = new_use['Equipment_ID']
+    
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Member_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    
+    conn = get_db_conn()
+    equipment = conn.execute('SELECT * FROM Equipments WHERE Eq_ID = ?', (Equipment_ID,)).fetchone()
+    conn.close()
+    if equipment is None:
+        return jsonify({'error': 'Equipment not found'}), 404
+    
+    conn = get_db_conn()
+    use = conn.execute('SELECT * FROM Use WHERE Member_ID = ? AND Equipment_ID = ?', (Member_ID, Equipment_ID)).fetchone()
+    conn.close()
+    if use:
+        return jsonify({'error': 'Relation-Use has already existed'}), 500
+    
+    conn = get_db_conn()
+    conn.execute('INSERT INTO Use (Member_ID, Equipment_ID) VALUES (?, ?)', (Member_ID, Equipment_ID))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Relation-Use created'}), 201
+
+@app.route('/use', methods=['GET'])
+def get_use():
+    conn = get_db_conn()
+    all_use = conn.execute('SELECT Members.M_Name as Member, Use.Member_ID, Equipments.Name as Equipment, Use.Equipment_ID FROM Use JOIN Members ON Use.Member_ID = Members.Mem_ID JOIN Equipments ON Use.Equipment_ID = Equipments.Eq_ID').fetchall()
+    conn.close()
+    
+    return jsonify([dict(use) for use in all_use])
+
+@app.route('/use', methods=['DELETE'])
+def delete_use():
+    delete_data = request.get_json()
+    Member_ID = delete_data['Member_ID']
+    Equipment_ID = delete_data['Equipment_ID']
+    
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Member_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    
+    conn = get_db_conn()
+    equipment = conn.execute('SELECT * FROM Equipments WHERE Eq_ID = ?', (Equipment_ID,)).fetchone()
+    conn.close()
+    if equipment is None:
+        return jsonify({'error': 'Equipment not found'}), 404
+    
+    conn = get_db_conn()
+    conn.execute('DELETE FROM Use WHERE Member_ID = ? AND Equipment_ID = ?', (Member_ID, Equipment_ID))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Relation-Use deleted'})
+
+
+# routes of Do
+@app.route('/do', methods=['POST'])
+def create_do():
+    new_do = request.get_json()
+    Member_ID = new_do['Member_ID']
+    Exercise_ID = new_do['Exercise_ID']
+    
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Member_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    
+    conn = get_db_conn()
+    exercise = conn.execute('SELECT * FROM Exercises WHERE EX_ID = ?', (Exercise_ID,)).fetchone()
+    conn.close()
+    if exercise is None:
+        return jsonify({'error': 'Exercise not found'}), 404
+    
+    conn = get_db_conn()
+    do = conn.execute('SELECT * FROM Do WHERE Member_ID = ? AND Exercise_ID = ?', (Member_ID, Exercise_ID)).fetchone()
+    conn.close()
+    if do:
+        return jsonify({'error': 'Relation-Do has already existed'}), 500
+    
+    conn = get_db_conn()
+    conn.execute('INSERT INTO Do (Member_ID, Exercise_ID) VALUES (?, ?)', (Member_ID, Exercise_ID))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Relation-Do created'}), 201
+
+@app.route('/do', methods=['GET'])
+def get_do():
+    conn = get_db_conn()
+    all_do = conn.execute('SELECT Members.M_Name as Member, Do.Member_ID, Exercises.EX_Name as Exercise, Do.Exercise_ID FROM Do JOIN Members ON Do.Member_ID = Members.Mem_ID JOIN Exercises ON Do.Exercise_ID = Exercises.EX_ID').fetchall()
+    conn.close()
+    
+    return jsonify([dict(do) for do in all_do])
+
+@app.route('/do', methods=['DELETE'])
+def delete_do():
+    delete_data = request.get_json()
+    Member_ID = delete_data['Member_ID']
+    Exercise_ID = delete_data['Exercise_ID']
+    
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Member_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    
+    conn = get_db_conn()
+    exercise = conn.execute('SELECT * FROM Exercises WHERE EX_ID = ?', (Exercise_ID,)).fetchone()
+    conn.close()
+    if exercise is None:
+        return jsonify({'error': 'Exercise not found'}), 404
+    
+    conn = get_db_conn()
+    conn.execute('DELETE FROM Do WHERE Member_ID = ? AND Exercise_ID = ?', (Member_ID, Exercise_ID))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Relation-Do deleted'})
+
+
+# routes of Consist
+@app.route('/consist', methods=['POST'])
+def create_consist():
+    new_consist = request.get_json()
+    Sub_Pack = new_consist['Sub_Pack']
+    Exercise_ID = new_consist['Exercise_ID']
+    
+    conn = get_db_conn()
+    subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Sub_Pack,)).fetchone()
+    conn.close()
+    if subscription is None:
+        return jsonify({'error': 'Subscription not found'}), 404
+    
+    conn = get_db_conn()
+    exercise = conn.execute('SELECT * FROM Exercises WHERE EX_ID = ?', (Exercise_ID,)).fetchone()
+    conn.close()
+    if exercise is None:
+        return jsonify({'error': 'Exercise not found'}), 404
+    
+    conn = get_db_conn()
+    consist = conn.execute('SELECT * FROM Consist WHERE Sub_Pack = ? AND Exercise_ID = ?', (Sub_Pack, Exercise_ID)).fetchone()
+    conn.close()
+    if consist:
+        return jsonify({'error': 'Relation-Consist has already existed'}), 500
+    
+    conn = get_db_conn()
+    conn.execute('INSERT INTO Consist (Sub_Pack, Exercise_ID) VALUES (?, ?)', (Sub_Pack, Exercise_ID))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Relation-Consist created'}), 201
+
+@app.route('/consist', methods=['GET'])
+def get_consist():
+    conn = get_db_conn()
+    all_consist = conn.execute('SELECT Subscriptions.Duration, Consist.Sub_Pack, Exercises.EX_Name as Exercise, Consist.Exercise_ID FROM Consist JOIN Subscriptions ON Consist.Sub_Pack = Subscriptions.Sub_ID JOIN Exercises ON Consist.Exercise_ID = Exercises.EX_ID').fetchall()
+    conn.close()
+    
+    return jsonify([dict(consist) for consist in all_consist])
+
+@app.route('/consist', methods=['DELETE'])
+def delete_consist():
+    delete_data = request.get_json()
+    Sub_Pack = delete_data['Sub_Pack']
+    Exercise_ID = delete_data['Exercise_ID']
+    
+    conn = get_db_conn()
+    subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Sub_Pack,)).fetchone()
+    conn.close()
+    if subscription is None:
+        return jsonify({'error': 'Subscription not found'}), 404
+    
+    conn = get_db_conn()
+    exercise = conn.execute('SELECT * FROM Exercises WHERE EX_ID = ?', (Exercise_ID,)).fetchone()
+    conn.close()
+    if exercise is None:
+        return jsonify({'error': 'Exercise not found'}), 404
+    
+    conn = get_db_conn()
+    conn.execute('DELETE FROM Consist WHERE Sub_Pack = ? AND Exercise_ID = ?', (Sub_Pack, Exercise_ID))
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Relation-Consist deleted'})
 
 if __name__ == '__main__':
     app.run(debug=True)
