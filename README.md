@@ -77,7 +77,7 @@ npm start
 | **T_ID** | Text | Primary key |
 | T_Name | Text | Not null |
 | Email_ID | Text |  |
-| Phone | Text | xxxx-xxx-xxx |
+| Phone | Text | Format: xxxx-xxx-xxx |
 | Gender | Text |  |
 | Hire_Date | Text | Not null |
 | Salary | Real | Not null <br> At least 50000 |
