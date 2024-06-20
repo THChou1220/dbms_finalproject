@@ -26,7 +26,7 @@ pip install -r requirements.txt --user
 
 >建立資料庫
 ```shell
-python db.py
+python database.py
 ```
 <br>
 
@@ -60,7 +60,7 @@ cd frontend
 
 >安裝需要的套件
 ```shell
-npm i
+npm install
 ```
 <br>
 
