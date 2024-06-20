@@ -362,11 +362,10 @@ def create_equipment():
     new_equipment = request.get_json()
     Eq_ID = generate_Eq_ID()
     Name = new_equipment['Name']
-    Quantity = new_equipment['Quantity']
     Cost = new_equipment['Cost']
     
     conn = get_db_conn()
-    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Quantity, Cost) VALUES (?, ?, ?, ?)', (Eq_ID, Name, Quantity, Cost))
+    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Cost) VALUES (?, ?, ?)', (Eq_ID, Name, Cost))
     conn.commit()
     conn.close()
     
