@@ -24,14 +24,14 @@ python start.py
 ```
 <br>
 
->另外開啟一個Terminal，執行以下指令
+>(非必要) 另外開啟一個Terminal，執行以下指令
 ```shell
 curl "http://localhost:5000"
 ```
 >若 *StatusCode* 為 *200*，且 *Content* 為 *Hello World* 則表示成功執行
 <br>
 
->在另外開啟的 *Terminal* 下進入 *backend*，執行以下指令:
+>(非必要) 在另外開啟的 *Terminal* 下進入 *backend*，執行以下指令:
 ```shell
 python data.py
 ```
