@@ -407,7 +407,7 @@ def create_equipment():
         return jsonify({'error': 'Cost must be numeric'}), 400
     
     conn = get_db_conn()
-    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Cost) VALUES (?, ?, ?)', (Eq_ID, Name, Cost))
+    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Quantity, Cost) VALUES (?, ?, ?, ?)', (Eq_ID, Name, Quantity, Cost))
     conn.commit()
     conn.close()
     
