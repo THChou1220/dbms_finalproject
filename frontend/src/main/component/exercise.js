@@ -81,6 +81,7 @@ class Exercises extends PureComponent {
                 )}>comfirm</Componentbutton>
                 <ComponentWapper>
                     <ComponentoptionWapper>
+                        <Componentindex>EX_ID</Componentindex>
                         <Componentindex>EX_Name</Componentindex>
                         <Componentindex>Type</Componentindex>
                         <Componentindex>Time_Slot</Componentindex>
@@ -88,6 +89,7 @@ class Exercises extends PureComponent {
                     </ComponentoptionWapper>
                     {type === 2 && exercisedata && exercisedata.length > 0 && exercisedata.map((item, index) => (
                         <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.EX_id}</Componentindex>
                             <Componentindex>{item.EX_Name}</Componentindex>
                             <Componentindex>{item.Type}</Componentindex>
                             <Componentindex>{item.Time_Slot}</Componentindex>

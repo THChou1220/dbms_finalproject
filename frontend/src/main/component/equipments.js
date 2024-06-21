@@ -76,12 +76,14 @@ class Equipments extends PureComponent {
                 )}>comfirm</Componentbutton>
                 <ComponentWapper>
                     <ComponentoptionWapper>
+                        <Componentindex>Eq_ID</Componentindex>
                         <Componentindex>Name</Componentindex>
                         <Componentindex>Quantity</Componentindex>
                         <Componentindex>Cost</Componentindex>
                     </ComponentoptionWapper>
                     {type === 2 && equipmentdata && equipmentdata.length > 0 && equipmentdata.map((item, index) => (
                         <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.Eq_ID}</Componentindex>
                             <Componentindex>{item.Name}</Componentindex>
                             <Componentindex>{item.Quantity}</Componentindex>
                             <Componentindex>{item.Cost}</Componentindex>

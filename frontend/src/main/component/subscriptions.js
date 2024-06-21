@@ -76,13 +76,17 @@ class Subscriptions extends PureComponent {
                 )}>comfirm</Componentbutton>
                 <ComponentWapper>
                     <ComponentoptionWapper>
+                        <Componentindex>Sub_ID</Componentindex>
                         <Componentindex>Price</Componentindex>
                         <Componentindex>Duration</Componentindex>
+                        <Componentindex>Sub_Num</Componentindex>
                     </ComponentoptionWapper>
-                    {type === 2 && subscriptiondata && subscriptiondata.length > 0 && subscriptiondata.map((item,index) => (
+                    {type === 2 && subscriptiondata && subscriptiondata.length > 0 && subscriptiondata.map((item, index) => (
                         <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.Sub_ID}</Componentindex>
                             <Componentindex>{item.Price}</Componentindex>
                             <Componentindex>{item.Duration}</Componentindex>
+                            <Componentindex>{item.Sub_Num}</Componentindex>
                         </ComponentoptionWapper>
                     ))}
                 </ComponentWapper>
