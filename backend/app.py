@@ -386,7 +386,25 @@ def create_equipment():
     new_equipment = request.get_json()
     Eq_ID = generate_Eq_ID()
     Name = new_equipment['Name']
+    Quantity = new_equipment['Quantity']
     Cost = new_equipment['Cost']
+    
+    if not new_equipment['Name'] or new_equipment['Name'] == "":
+        return jsonify({'error': 'Name cannot be empty'}), 400
+    
+    try:
+        Quantity = int(Quantity)
+        if isinstance(new_equipment['Quantity'], float):
+            return jsonify({'error': 'Quantity must be an integer'}), 400
+        if Quantity < 1:
+            return jsonify({'error': 'Quantity must be at least 1'})
+    except ValueError:
+        return jsonify({'error': 'Quantity must be an integer'}), 400
+    
+    try:
+        Cost = float(Cost)
+    except ValueError:
+        return jsonify({'error': 'Cost must be numeric'}), 400
     
     conn = get_db_conn()
     conn.execute('INSERT INTO Equipments (Eq_ID, Name, Cost) VALUES (?, ?, ?)', (Eq_ID, Name, Cost))
@@ -435,6 +453,23 @@ def update_equipment(Eq_ID):
     Name = update_data['Name']
     Quantity = update_data['Quantity']
     Cost = update_data['Cost']
+    
+    if not update_data['Name'] or update_data['Name'] == "":
+        return jsonify({'error': 'Name cannot be empty'}), 400
+    
+    try:
+        Quantity = int(Quantity)
+        if isinstance(update_data['Quantity'], float):
+            return jsonify({'error': 'Quantity must be an integer'}), 400
+        if Quantity < 1:
+            return jsonify({'error': 'Quantity must be at least 1'})
+    except ValueError:
+        return jsonify({'error': 'Quantity must be an integer'}), 400
+    
+    try:
+        Cost = float(Cost)
+    except ValueError:
+        return jsonify({'error': 'Cost must be numeric'}), 400
     
     conn = get_db_conn()
     conn.execute('UPDATE Equipments SET Name = ?, Quantity = ?, Cost = ? WHERE Eq_ID = ?', (Name, Quantity, Cost, Eq_ID))
