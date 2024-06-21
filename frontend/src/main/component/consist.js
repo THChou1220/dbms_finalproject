@@ -15,7 +15,7 @@ class Consist extends PureComponent {
         hoveredBox: null,
         type: null,
         pages: [
-            { id: 1, text: 'creat' },
+            { id: 1, text: 'create' },
             { id: 2, text: 'read' },
             { id: 4, text: 'delete' }
         ]
