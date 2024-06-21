@@ -42,14 +42,14 @@ def create_trainer():
     Salary = new_trainer['Salary']
     
     if not new_trainer['T_Name'] or new_trainer['T_Name'] == "":
-        return jsonify({'error': 'T_Name cannot be empty'}), 500
+        return jsonify({'error': 'T_Name cannot be empty'}), 400
     
     try:
-        Salary = float(new_trainer['Salary'])
+        Salary = float(Salary)
         if Salary < 50000:
-            return jsonify({'error': 'Salary must be at least 50000'}), 500
+            return jsonify({'error': 'Salary must be at least 50000'}), 400
     except ValueError:
-        return jsonify({'error': 'Salary must be a numeric value'}), 500
+        return jsonify({'error': 'Salary must be numeric'}), 400
     
     conn = get_db_conn()
     conn.execute('INSERT INTO Trainers (T_ID, T_Name, Email_ID, Phone, Gender, Hire_Date, Salary) VALUES (?, ?, ?, ?, ?, ?, ?)', (T_ID, T_Name, Email_ID, Phone, Gender, Hire_Date, Salary))
@@ -116,14 +116,14 @@ def update_trainer(T_ID):
     Salary = update_data['Salary']
     
     if not update_data['T_Name'] or update_data['T_Name'] == "":
-        return jsonify({'error': 'T_Name cannot be empty'}), 500
+        return jsonify({'error': 'T_Name cannot be empty'}), 400
     
     try:
-        Salary = float(update_data['Salary'])
+        Salary = float(Salary)
         if Salary < 50000:
-            return jsonify({'error': 'Salary must be at least 50000'}), 500
+            return jsonify({'error': 'Salary must be at least 50000'}), 400
     except ValueError:
-        return jsonify({'error': 'Salary must be a numeric value'}), 500
+        return jsonify({'error': 'Salary must be numeric'}), 400
     
     conn = get_db_conn()
     conn.execute('UPDATE Trainers SET T_Name = ?, Email_ID = ?, Phone = ?, Gender = ?, Salary = ? WHERE T_ID = ?', (T_Name, Email_ID, Phone, Gender, Salary, T_ID))
@@ -165,7 +165,7 @@ def create_member():
     Trainer_ID = new_member['Trainer_ID']
     
     if not new_member['M_Name'] or new_member['M_Name'] == "":
-        return jsonify({'error': 'M_Name cannot be empty'}), 500
+        return jsonify({'error': 'M_Name cannot be empty'}), 400
     
     conn = get_db_conn()
     subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
@@ -235,7 +235,7 @@ def update_member(Mem_ID):
     Trainer_ID = update_data['Trainer_ID']
     
     if not update_data['M_Name'] or update_data['M_Name'] == "":
-        return jsonify({'error': 'M_Name cannot be empty'}), 500
+        return jsonify({'error': 'M_Name cannot be empty'}), 400
     
     conn = get_db_conn()
     subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
@@ -286,6 +286,18 @@ def create_subscription():
     Price = new_subscription['Price']
     Duration = new_subscription['Duration']
     
+    try:
+        Price = float(Price)
+    except ValueError:
+        return jsonify({'error': 'Price must be numeric'}), 400
+    
+    try:
+        Duration = int(Duration)
+        if isinstance(new_subscription['Duration'], float):
+            return jsonify({'error': 'Duration must be an integer'}), 400
+    except ValueError:
+        return jsonify({'error': 'Duration must be an integer'}), 400
+    
     conn = get_db_conn()
     conn.execute('INSERT INTO Subscriptions (Sub_ID, Price, Duration) VALUES (?, ?, ?)', (Sub_ID, Price, Duration))
     conn.commit()
@@ -333,6 +345,18 @@ def update_subscription(Sub_ID):
     Price = update_data['Price']
     Duration = update_data['Duration']
     
+    try:
+        Price = float(Price)
+    except ValueError:
+        return jsonify({'error': 'Price must be numeric'}), 400
+    
+    try:
+        Duration = int(Duration)
+        if isinstance(update_data['Duration'], float):
+            return jsonify({'error': 'Duration must be an integer'}), 400
+    except ValueError:
+        return jsonify({'error': 'Duration must be an integer'}), 400
+    
     conn = get_db_conn()
     conn.execute('UPDATE Subscriptions SET Price = ?, Duration = ? WHERE Sub_ID = ?', (Price, Duration, Sub_ID))
     conn.commit()
@@ -362,10 +386,28 @@ def create_equipment():
     new_equipment = request.get_json()
     Eq_ID = generate_Eq_ID()
     Name = new_equipment['Name']
+    Quantity = new_equipment['Quantity']
     Cost = new_equipment['Cost']
     
+    if not new_equipment['Name'] or new_equipment['Name'] == "":
+        return jsonify({'error': 'Name cannot be empty'}), 400
+    
+    try:
+        Quantity = int(Quantity)
+        if isinstance(new_equipment['Quantity'], float):
+            return jsonify({'error': 'Quantity must be an integer'}), 400
+        if Quantity < 1:
+            return jsonify({'error': 'Quantity must be at least 1'})
+    except ValueError:
+        return jsonify({'error': 'Quantity must be an integer'}), 400
+    
+    try:
+        Cost = float(Cost)
+    except ValueError:
+        return jsonify({'error': 'Cost must be numeric'}), 400
+    
     conn = get_db_conn()
-    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Cost) VALUES (?, ?, ?)', (Eq_ID, Name, Cost))
+    conn.execute('INSERT INTO Equipments (Eq_ID, Name, Quantity, Cost) VALUES (?, ?, ?, ?)', (Eq_ID, Name, Quantity, Cost))
     conn.commit()
     conn.close()
     
@@ -411,6 +453,23 @@ def update_equipment(Eq_ID):
     Name = update_data['Name']
     Quantity = update_data['Quantity']
     Cost = update_data['Cost']
+    
+    if not update_data['Name'] or update_data['Name'] == "":
+        return jsonify({'error': 'Name cannot be empty'}), 400
+    
+    try:
+        Quantity = int(Quantity)
+        if isinstance(update_data['Quantity'], float):
+            return jsonify({'error': 'Quantity must be an integer'}), 400
+        if Quantity < 1:
+            return jsonify({'error': 'Quantity must be at least 1'})
+    except ValueError:
+        return jsonify({'error': 'Quantity must be an integer'}), 400
+    
+    try:
+        Cost = float(Cost)
+    except ValueError:
+        return jsonify({'error': 'Cost must be numeric'}), 400
     
     conn = get_db_conn()
     conn.execute('UPDATE Equipments SET Name = ?, Quantity = ?, Cost = ? WHERE Eq_ID = ?', (Name, Quantity, Cost, Eq_ID))

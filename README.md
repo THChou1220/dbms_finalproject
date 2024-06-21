@@ -6,7 +6,7 @@ Back-End Framework: **Python - Flask** <br>
 Front-End Framework: **JavaScript - React**
 
 ### *Pre-Start*
-  至 https://sqlite.org/download.html 下載SQLite
+至 https://sqlite.org/download.html 下載SQLite
 
 ### *Start*
 
@@ -70,7 +70,20 @@ npm start
 ```
 
 ### *Database*
-- ***Trainers***
+
+- ***ER Model***
+
+![ER Model](https://github.com/THChou1220/dbms_finalproject/blob/main/image/ER_Model.png)
+<br>
+
+- ***Relational Schema***
+
+![Relational_Schema](https://github.com/THChou1220/dbms_finalproject/blob/main/image/Relational_Schema.png)
+<br>
+
+- ***Tables***
+
+` Trainers `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
@@ -82,7 +95,7 @@ npm start
 | Hire_Date | Text | Not null |
 | Salary | Real | Not null <br> At least 50000 |
 
-- ***Members***
+` Members `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
@@ -98,25 +111,25 @@ npm start
 | Email_ID | Text |  |
 | *Trainer_ID* | Text | Foreign key <br> Not null |
 
-- ***Subscriptions***
+` Subscriptions `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | **Sub_ID** | Text | Primary key |
 | Price | Real | Not null |
-| Duration | Integer | Not null |
+| Duration | Integer | Not null <br> At least 1 |
 | Sub_Num | Integer | Default 0 |
 
-- ***Equipments***
+` Equipments `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | **Eq_ID** | Text | Primary key |
 | Name | Text | Not null |
-| Quantity | Integer | Default 10 <br> Domain: 10 to 1 |
+| Quantity | Integer | Not null <br> At least 1 |
 | Cost | Real | Not null |
 
-- ***Exercises***
+` Exercises `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
@@ -126,21 +139,21 @@ npm start
 | Time_Slot | Integer | Not null |
 | Frequency | Integer | Not null |
 
-- ***Use***
+` Use `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | ***Member_ID*** | Text | Primary key <br> Foreign key |
 | ***Equipment_ID*** | Text | Primary key <br> Foreign key |
 
-- ***Do***
+` Do `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | ***Member_ID*** | Text | Primary key <br> Foreign key |
 | ***Exercise_ID*** | Text | Primary key <br> Foreign key |
 
-- ***Consist***
+` Consist `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |

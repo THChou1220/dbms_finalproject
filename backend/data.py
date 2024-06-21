@@ -92,22 +92,27 @@ equipment_url = "http://127.0.0.1:5000/equipments"
 equipments = [
     {
         "Name": "Treadmill",
+        "Quantity": 1,
         "Cost": 25000
     },
     {
         "Name": "Spinning Bike",
+        "Quantity": 1,
         "Cost": 20000
     },
     {
         "Name": "Dumbbell Set",
+        "Quantity": 1,
         "Cost": 15000
     },
     {
         "Name": "Leg Press Machine",
+        "Quantity": 1,
         "Cost": 35000
     },
     {
         "Name": "Lat Pulldown Machine",
+        "Quantity": 1,
         "Cost": 50000
     }
 ]

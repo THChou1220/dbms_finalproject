@@ -45,7 +45,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Subscriptions (
             Sub_ID TEXT PRIMARY KEY,
             Price REAL NOT NULL,
-            Duration INTEGER NOT NULL,
+            Duration INTEGER NOT NULL CHECK (Duration >= 1),
             Sub_Num INTEGER DEFAULT 0
         )
     ''')
@@ -64,7 +64,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Equipments (
             Eq_ID TEXT PRIMARY KEY,
             Name TEXT NOT NULL,
-            Quantity INTEGER DEFAULT 10 CHECK (Quantity <= 10 AND Quantity >= 1),
+            Quantity INTEGER NOT NULL CHECK (Quantity >= 1),
             Cost REAL NOT NULL
         )
     ''')
