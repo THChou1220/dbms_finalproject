@@ -18,21 +18,9 @@ cd backend
 ```
 <br>
 
->安裝需要的套件
+>啟動
 ```shell
-pip install -r requirements.txt --user
-```
-<br>
-
->建立資料庫
-```shell
-python database.py
-```
-<br>
-
->執行 *app.py*
-```shell
-python app.py
+python start.py
 ```
 <br>
 
