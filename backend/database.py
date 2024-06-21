@@ -45,7 +45,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Subscriptions (
             Sub_ID TEXT PRIMARY KEY,
             Price REAL NOT NULL,
-            Duration INTEGER NOT NULL,
+            Duration INTEGER NOT NULL CHECK (Duration >= 1),
             Sub_Num INTEGER DEFAULT 0
         )
     ''')
