@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import sqlite3
 import random, string
 
@@ -6,6 +7,7 @@ import os
 database_path = os.path.join(os.path.dirname(__file__), 'gym.db')
 
 app = Flask(__name__)
+CORS(app)
 
 def get_db_conn():
     conn = sqlite3.connect(database_path)
@@ -56,7 +58,7 @@ def create_trainer():
     conn.commit()
     conn.close()
     
-    return jsonify({'T_ID': T_ID, 'T_Name': T_Name}), 201
+    return jsonify({'T_id': T_ID, 'T_Name': T_Name}), 201
 
 def generate_T_ID():
     conn = get_db_conn()
@@ -74,6 +76,13 @@ def get_trainers():
     trainers = conn.execute('SELECT * FROM Trainers').fetchall()
     conn.close()
     
+    trainers_list = []
+    for trainer in trainers:
+        trainer_dict = dict(trainer)
+        trainer_dict['T_id'] = trainer_dict.pop('T_ID')
+        trainers_list.append(trainer_dict)
+    trainers = trainers_list
+    
     return jsonify([dict(trainer) for trainer in trainers])
 
 @app.route('/trainers/<T_ID>', methods=['GET'])
@@ -83,6 +92,10 @@ def get_trainer(T_ID):
     conn.close()
     if trainer is None:
         return jsonify({'error': 'Trainer not found'}), 404
+    
+    trainer_dict = dict(trainer)
+    trainer_dict['T_id'] = trainer_dict.pop('T_ID')
+    trainer = trainer_dict
     
     return jsonify(dict(trainer))
 
@@ -100,7 +113,7 @@ def get_members_of_trainer(T_ID):
     
     return jsonify([dict(member) for member in members])
 
-@app.route('/trainers/<T_ID>', methods=['PUT'])
+@app.route('/trainers/<T_ID>', methods=['PATCH'])
 def update_trainer(T_ID):
     conn = get_db_conn()
     trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (T_ID,)).fetchone()
@@ -215,7 +228,7 @@ def get_member(Mem_ID):
     
     return jsonify(dict(member))
 
-@app.route('/members/<Mem_ID>', methods=['PUT'])
+@app.route('/members/<Mem_ID>', methods=['PATCH'])
 def update_member(Mem_ID):
     conn = get_db_conn()
     member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()
@@ -333,7 +346,7 @@ def get_subscription(Sub_ID):
     
     return jsonify(dict(subscription))
 
-@app.route('/subscriptions/<Sub_ID>', methods=['PUT'])
+@app.route('/subscriptions/<Sub_ID>', methods=['PATCH'])
 def update_subscription(Sub_ID):
     conn = get_db_conn()
     subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Sub_ID,)).fetchone()
@@ -441,7 +454,7 @@ def get_equipment(Eq_ID):
     
     return jsonify(dict(equipment))
 
-@app.route('/equipments/<Eq_ID>', methods=['PUT'])
+@app.route('/equipments/<Eq_ID>', methods=['PATCH'])
 def update_equipment(Eq_ID):
     conn = get_db_conn()
     equipment = conn.execute('SELECT * FROM Equipments WHERE Eq_ID = ?', (Eq_ID,)).fetchone()
@@ -509,7 +522,7 @@ def create_exercise():
     conn.commit()
     conn.close()
     
-    return jsonify({'EX_ID': EX_ID, 'EX_Name': EX_Name}), 201
+    return jsonify({'EX_id': EX_ID, 'EX_Name': EX_Name}), 201
 
 def generate_EX_ID():
     conn = get_db_conn()
@@ -527,6 +540,13 @@ def get_exercises():
     exercises = conn.execute('SELECT * FROM Exercises').fetchall()
     conn.close()
     
+    exercises_list = []
+    for exercise in exercises:
+        exercise_dict = dict(exercise)
+        exercise_dict['EX_id'] = exercise_dict.pop('EX_ID')
+        exercises_list.append(exercise_dict)
+    exercises = exercises_list
+    
     return jsonify([dict(exercise) for exercise in exercises])
 
 @app.route('/exercises/<EX_ID>', methods=['GET'])
@@ -537,9 +557,13 @@ def get_exercise(EX_ID):
     if exercise is None:
         return jsonify({'error': 'Exercise not found'}), 404
     
+    exercise_dict = dict(exercise)
+    exercise_dict['EX_id'] = exercise_dict.pop('EX_ID')
+    exercise = exercise_dict
+    
     return jsonify(dict(exercise))
 
-@app.route('/exercises/<EX_ID>', methods=['PUT'])
+@app.route('/exercises/<EX_ID>', methods=['PATCH'])
 def update_exercise(EX_ID):
     conn = get_db_conn()
     exercise = conn.execute('SELECT * FROM Exercises WHERE EX_ID = ?', (EX_ID,)).fetchone()
