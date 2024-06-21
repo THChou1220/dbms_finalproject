@@ -7,6 +7,7 @@
             "Email_ID": "test1@test.com",
             "Phone": "0900-000-001",
             "Gender": "Male",
+            "Hire_Date": "222",
             "Salary": 50000
         },
         {
@@ -15,6 +16,7 @@
             "Email_ID": "test2@test.com",
             "Phone": "0900-000-002",
             "Gender": "Female",
+            "Hire_Date": "222",
             "Salary": 50000
         },
         {
@@ -23,6 +25,7 @@
             "Email_ID": "test3@test.com",
             "Phone": "0900-000-003",
             "Gender": "Male",
+            "Hire_Date": "222",
             "Salary": 50000
         },
         {
@@ -31,6 +34,7 @@
             "Email_ID": "test4@test.com",
             "Phone": "0900-000-004",
             "Gender": "Female",
+            "Hire_Date": "222",
             "Salary": 50000
         },
         {
@@ -39,6 +43,7 @@
             "Email_ID": "test5@test.com",
             "Phone": "0900-000-005",
             "Gender": "Male",
+            "Hire_Date": "222",
             "Salary": 50000
         }
     ]
