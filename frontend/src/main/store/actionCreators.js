@@ -8,7 +8,7 @@ export const setcategorypage = (page) => ({
 
 export const trainersendinfo = (type, t_id, t_name, email_id, phone, gender, hire_date, salary) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/trainer.json', { type, t_id, t_name, email_id, phone, gender, hire_date, salary }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/trainer.json', { type, t_id, t_name, email_id, phone, gender, hire_date, salary }).then((res) => {
       if (type === 2) {
         const result = res.data.trainers;
         dispatch(trainerdata(result));
@@ -26,7 +26,7 @@ const trainerdata = (result) => ({
 
 export const membersendinfo = (type, mem_id, m_name, phone, start_date, gender, subs, height, weight, age, email_id, trainer_id) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/member.json', { type, mem_id, m_name, phone, start_date, gender, subs, height, weight, age, email_id, trainer_id }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/member.json', { type, mem_id, m_name, phone, start_date, gender, subs, height, weight, age, email_id, trainer_id }).then((res) => {
       if (type === 2) {
         const result = res.data.members;
         dispatch(memberdata(result));
@@ -44,7 +44,7 @@ const memberdata = (result) => ({
 
 export const subscriptionssendinfo = (type, sub_ID, price, duration, sub_num) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/subscription.json', { type, sub_ID, price, duration, sub_num }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/subscription.json', { type, sub_ID, price, duration, sub_num }).then((res) => {
       if (type === 2) {
         const result = res.data.subscriptions;
         dispatch(subscriptiondata(result));
@@ -62,7 +62,7 @@ const subscriptiondata = (result) => ({
 
 export const consistsendinfo = (type, sub_pack, exercise_ID) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/consist.json', { type, sub_pack, exercise_ID }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/consist.json', { type, sub_pack, exercise_ID }).then((res) => {
       if (type === 2) {
         const result = res.data.consist;
         dispatch(consistdata(result));
@@ -80,7 +80,7 @@ const consistdata = (result) => ({
 
 export const equipmentsendinfo = (type, eq_ID, name, quantity, cost) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/equipment.json', { type, eq_ID, name, quantity, cost }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/equipment.json', { type, eq_ID, name, quantity, cost }).then((res) => {
       if (type === 2) {
         const result = res.data.equipments;
         dispatch(equipmentdata(result));
@@ -98,7 +98,7 @@ const equipmentdata = (result) => ({
 
 export const usesendinfo = (type, member_ID, equipment_ID) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/use.json', { type, member_ID, equipment_ID }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/use.json', { type, member_ID, equipment_ID }).then((res) => {
       if (type === 2) {
         const result = res.data.uses;
         dispatch(usedata(result));
@@ -116,7 +116,7 @@ const usedata = (result) => ({
 
 export const exercisesendinfo = (type, ex_ID, ex_name, types, time_slot, frequency) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/exercise.json', { type, ex_ID, ex_name, types, time_slot, frequency }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/exercise.json', { type, ex_ID, ex_name, types, time_slot, frequency }).then((res) => {
       if (type === 2) {
         const result = res.data.exercises;
         dispatch(exercisedata(result));
@@ -134,7 +134,7 @@ const exercisedata = (result) => ({
 
 export const dosendinfo = (type, member_ID, exercise_ID) => {
   return (dispatch) => {
-    axios./*正是對接時用post*/get('/api/do.json', { type, member_ID, exercise_ID }).then((res) => {
+    axios./*測試api時把get換成post*/get('/api/do.json', { type, member_ID, exercise_ID }).then((res) => {
       if (type === 2) {
         const result = res.data.do;
         dispatch(dodata(result));
