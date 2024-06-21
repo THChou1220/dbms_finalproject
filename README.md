@@ -117,7 +117,7 @@ npm start
 | :--- | :--- | :--- |
 | **Sub_ID** | Text | Primary key |
 | Price | Real | Not null |
-| Duration | Integer | Not null |
+| Duration | Integer | Not null <br> At least 1 |
 | Sub_Num | Integer | Default 0 |
 
 ` Equipments `
