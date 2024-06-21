@@ -17,7 +17,6 @@ class Use extends PureComponent {
         pages: [
             { id: 1, text: 'creat' },
             { id: 2, text: 'read' },
-            { id: 3, text: 'update' },
             { id: 4, text: 'delete' }
         ]
     };
@@ -36,6 +35,7 @@ class Use extends PureComponent {
 
     render() {
         const { hoveredBox, pages, type } = this.state;
+        const { usedata } = this.props;
         return (
             <ComponentWapper>
                 <ComponentoptionWapper>
@@ -51,11 +51,11 @@ class Use extends PureComponent {
                         </Categoryoption>
                     ))}</ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>member ID</Componentindex>
+                    <Componentindex>Member_ID</Componentindex>
                     <Componentinput ref={(input) => { this.member_ID = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>equipment ID</Componentindex>
+                    <Componentindex>Equipment_ID</Componentindex>
                     <Componentinput ref={(input) => { this.equipment_ID = input }} />
                 </ComponentoptionWapper>
                 <Componentbutton onClick={() => this.props.usesendinfo(
@@ -63,13 +63,25 @@ class Use extends PureComponent {
                     this.member_ID,
                     this.equipment_ID,
                 )}>comfirm</Componentbutton>
+                <ComponentWapper>
+                    <ComponentoptionWapper>
+                        <Componentindex>Member_ID</Componentindex>
+                        <Componentindex>Equipment_ID</Componentindex>
+                    </ComponentoptionWapper>
+                    {type === 2 && usedata && usedata.length > 0 && usedata.map((item, index) => (
+                        <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.Member_ID}</Componentindex>
+                            <Componentindex>{item.Equipment_ID}</Componentindex>
+                        </ComponentoptionWapper>
+                    ))}
+                </ComponentWapper>
             </ComponentWapper>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-
+    usedata: state.main.usedata
 })
 
 const mapDisptchToProps = (dispatch) => {

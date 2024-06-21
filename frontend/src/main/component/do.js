@@ -17,7 +17,6 @@ class Do extends PureComponent {
         pages: [
             { id: 1, text: 'creat' },
             { id: 2, text: 'read' },
-            { id: 3, text: 'update' },
             { id: 4, text: 'delete' }
         ]
     };
@@ -36,6 +35,7 @@ class Do extends PureComponent {
 
     render() {
         const { hoveredBox, pages, type } = this.state;
+        const { dodata } = this.props;
         return (
             <ComponentWapper>
                 <ComponentoptionWapper>
@@ -51,11 +51,11 @@ class Do extends PureComponent {
                         </Categoryoption>
                     ))}</ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>member_ID</Componentindex>
+                    <Componentindex>Member_ID</Componentindex>
                     <Componentinput ref={(input) => { this.member_ID = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>exercise ID</Componentindex>
+                    <Componentindex>Exercise_ID</Componentindex>
                     <Componentinput ref={(input) => { this.exercise_ID = input }} />
                 </ComponentoptionWapper>
                 <Componentbutton onClick={() => this.props.dosendinfo(
@@ -63,13 +63,25 @@ class Do extends PureComponent {
                     this.member_ID,
                     this.exercise_ID,
                 )}>comfirm</Componentbutton>
+                <ComponentWapper>
+                    <ComponentoptionWapper>
+                        <Componentindex>Member_ID</Componentindex>
+                        <Componentindex>Exercise_ID</Componentindex>
+                    </ComponentoptionWapper>
+                    {type === 2 && dodata && dodata.length > 0 && dodata.map((item, index) => (
+                        <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.Member_ID}</Componentindex>
+                            <Componentindex>{item.Exercise_ID}</Componentindex>
+                        </ComponentoptionWapper>
+                    ))}
+                </ComponentWapper>
             </ComponentWapper>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-
+    dodata: state.main.dodata
 })
 
 const mapDisptchToProps = (dispatch) => {

@@ -1,0 +1,25 @@
+{
+    "success": true,
+    "subscriptions": [
+        {
+            "Price": 1500,
+            "Duration": 1
+        },
+        {
+            "Price": 2800,
+            "Duration": 2
+        },
+        {
+            "Price": 4000,
+            "Duration": 3
+        },
+        {
+            "Price": 7000,
+            "Duration": 6
+        },
+        {
+            "Price": 11000,
+            "Duration": 12
+        }
+    ]
+}

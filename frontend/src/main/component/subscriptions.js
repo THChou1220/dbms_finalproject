@@ -36,6 +36,7 @@ class Subscriptions extends PureComponent {
 
     render() {
         const { hoveredBox, pages, type } = this.state;
+        const { subscriptiondata } = this.props;
         return (
             <ComponentWapper>
                 <ComponentoptionWapper>
@@ -51,19 +52,19 @@ class Subscriptions extends PureComponent {
                         </Categoryoption>
                     ))}</ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>sub ID</Componentindex>
+                    <Componentindex>Sub_ID</Componentindex>
                     <Componentinput ref={(input) => { this.sub_ID = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>price</Componentindex>
+                    <Componentindex>Price</Componentindex>
                     <Componentinput ref={(input) => { this.price = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>duration</Componentindex>
+                    <Componentindex>Duration</Componentindex>
                     <Componentinput ref={(input) => { this.duration = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>sub num</Componentindex>
+                    <Componentindex>Sub_Num</Componentindex>
                     <Componentinput ref={(input) => { this.sub_num = input }} />
                 </ComponentoptionWapper>
                 <Componentbutton onClick={() => this.props.subscriptionssendinfo(
@@ -73,13 +74,25 @@ class Subscriptions extends PureComponent {
                     this.duration,
                     this.sub_num,
                 )}>comfirm</Componentbutton>
+                <ComponentWapper>
+                    <ComponentoptionWapper>
+                        <Componentindex>Price</Componentindex>
+                        <Componentindex>Duration</Componentindex>
+                    </ComponentoptionWapper>
+                    {type === 2 && subscriptiondata && subscriptiondata.length > 0 && subscriptiondata.map((item,index) => (
+                        <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.Price}</Componentindex>
+                            <Componentindex>{item.Duration}</Componentindex>
+                        </ComponentoptionWapper>
+                    ))}
+                </ComponentWapper>
             </ComponentWapper>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-
+    subscriptiondata: state.main.subscriptiondata
 })
 
 const mapDisptchToProps = (dispatch) => {

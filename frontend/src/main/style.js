@@ -78,7 +78,6 @@ width: 100px;
 border-radius: 7px;
 font-size: 18px;
 cursor: pointer;
-float: left;
 background: #97CBFF;
 &.reject {
 color: red;

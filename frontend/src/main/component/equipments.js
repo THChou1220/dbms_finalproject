@@ -36,6 +36,7 @@ class Equipments extends PureComponent {
 
     render() {
         const { hoveredBox, pages, type } = this.state;
+        const { equipmentdata } = this.props;
         return (
             <ComponentWapper>
                 <ComponentoptionWapper>
@@ -51,19 +52,19 @@ class Equipments extends PureComponent {
                         </Categoryoption>
                     ))}</ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>eq ID</Componentindex>
+                    <Componentindex>Eq_ID</Componentindex>
                     <Componentinput ref={(input) => { this.eq_ID = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>name</Componentindex>
+                    <Componentindex>Name</Componentindex>
                     <Componentinput ref={(input) => { this.name = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>quantity</Componentindex>
+                    <Componentindex>Quantity</Componentindex>
                     <Componentinput ref={(input) => { this.quantity = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>cost</Componentindex>
+                    <Componentindex>Cost</Componentindex>
                     <Componentinput ref={(input) => { this.cost = input }} />
                 </ComponentoptionWapper>
                 <Componentbutton onClick={() => this.props.equipmentsendinfo(
@@ -73,13 +74,28 @@ class Equipments extends PureComponent {
                     this.quantity,
                     this.cost,
                 )}>comfirm</Componentbutton>
+                <ComponentWapper>
+                    <ComponentoptionWapper>
+                        <Componentindex>Name</Componentindex>
+                        <Componentindex>Quantity</Componentindex>
+                        <Componentindex>Cost</Componentindex>
+                    </ComponentoptionWapper>
+                    {type === 2 && equipmentdata && equipmentdata.length > 0 && equipmentdata.map((item, index) => (
+                        <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.Name}</Componentindex>
+                            <Componentindex>{item.Quantity}</Componentindex>
+                            <Componentindex>{item.Cost}</Componentindex>
+
+                        </ComponentoptionWapper>
+                    ))}
+                </ComponentWapper>
             </ComponentWapper>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-
+    equipmentdata: state.main.equipmentdata
 })
 
 const mapDisptchToProps = (dispatch) => {
