@@ -6,7 +6,7 @@ Back-End Framework: **Python - Flask** <br>
 Front-End Framework: **JavaScript - React**
 
 ### *Pre-Start*
-  至 https://sqlite.org/download.html 下載SQLite
+至 https://sqlite.org/download.html 下載SQLite
 
 ### *Start*
 
