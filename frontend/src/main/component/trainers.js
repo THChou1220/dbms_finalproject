@@ -91,18 +91,22 @@ class Trainers extends PureComponent {
                 )}>comfirm</Componentbutton>
                 <ComponentWapper>
                     <ComponentoptionWapper>
+                        <Componentindex>T_ID</Componentindex>
                         <Componentindex>T_Name</Componentindex>
                         <Componentindex>Email_ID</Componentindex>
                         <Componentindex>Phone</Componentindex>
                         <Componentindex>Gender</Componentindex>
+                        <Componentindex>Hire_Date</Componentindex>
                         <Componentindex>Salary</Componentindex>
                     </ComponentoptionWapper>
-                    {type === 2 && trainerdata && trainerdata.length > 0 && trainerdata.map((item,index) => (
+                    {type === 2 && trainerdata && trainerdata.length > 0 && trainerdata.map((item, index) => (
                         <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.T_id}</Componentindex>
                             <Componentindex>{item.T_Name}</Componentindex>
                             <Componentindex>{item.Email_ID}</Componentindex>
                             <Componentindex>{item.Phone}</Componentindex>
                             <Componentindex>{item.Gender}</Componentindex>
+                            <Componentindex>{item.Hire_Date}</Componentindex>
                             <Componentindex>{item.Salary}</Componentindex>
                         </ComponentoptionWapper>
                     ))}
