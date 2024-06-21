@@ -17,7 +17,6 @@ class Consist extends PureComponent {
         pages: [
             { id: 1, text: 'creat' },
             { id: 2, text: 'read' },
-            { id: 3, text: 'update' },
             { id: 4, text: 'delete' }
         ]
     };
@@ -36,6 +35,7 @@ class Consist extends PureComponent {
 
     render() {
         const { hoveredBox, pages, type } = this.state;
+        const { consistdata } = this.props;
         return (
             <ComponentWapper>
                 <ComponentoptionWapper>
@@ -51,11 +51,11 @@ class Consist extends PureComponent {
                         </Categoryoption>
                     ))}</ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>sub pack</Componentindex>
+                    <Componentindex>Sub_Pack</Componentindex>
                     <Componentinput ref={(input) => { this.sub_pack = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>exercise ID</Componentindex>
+                    <Componentindex>Exercise_ID</Componentindex>
                     <Componentinput ref={(input) => { this.exercise_ID = input }} />
                 </ComponentoptionWapper>
                 <Componentbutton onClick={() => this.props.consistsendinfo(
@@ -63,13 +63,25 @@ class Consist extends PureComponent {
                     this.sub_pack,
                     this.exercise_ID,
                 )}>comfirm</Componentbutton>
+                <ComponentWapper>
+                    <ComponentoptionWapper>
+                        <Componentindex>Sub_Pack</Componentindex>
+                        <Componentindex>Exercise_ID</Componentindex>
+                    </ComponentoptionWapper>
+                    {type === 2 && consistdata && consistdata.length > 0 && consistdata.map((item, index) => (
+                        <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.Sub_Pack}</Componentindex>
+                            <Componentindex>{item.Exercise_ID}</Componentindex>
+                        </ComponentoptionWapper>
+                    ))}
+                </ComponentWapper>
             </ComponentWapper>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-
+    consistdata: state.main.consistdata
 })
 
 const mapDisptchToProps = (dispatch) => {

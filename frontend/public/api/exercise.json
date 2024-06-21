@@ -1,0 +1,35 @@
+{
+    "success": true,
+    "exercises": [
+        {
+            "EX_Name": "Plank",
+            "Type": "Upper Body",
+            "Time_Slot": 3,
+            "Frequency": 5
+        },
+        {
+            "EX_Name": "Crunch",
+            "Type": "Upper Body",
+            "Time_Slot": 3,
+            "Frequency": 5
+        },
+        {
+            "EX_Name": "Squat",
+            "Type": "Lower Body",
+            "Time_Slot": 3,
+            "Frequency": 5
+        },
+        {
+            "EX_Name": "Push Up",
+            "Type": "Upper Body",
+            "Time_Slot": 3,
+            "Frequency": 5
+        },
+        {
+            "EX_Name": "Lunge",
+            "Type": "Lower Body",
+            "Time_Slot": 3,
+            "Frequency": 5
+        }
+    ]
+}

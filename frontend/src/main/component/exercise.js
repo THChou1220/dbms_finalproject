@@ -36,6 +36,7 @@ class Exercises extends PureComponent {
 
     render() {
         const { hoveredBox, pages, type } = this.state;
+        const { exercisedata } = this.props;
         return (
             <ComponentWapper>
                 <ComponentoptionWapper>
@@ -51,23 +52,23 @@ class Exercises extends PureComponent {
                         </Categoryoption>
                     ))}</ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>ex ID</Componentindex>
+                    <Componentindex>EX_ID</Componentindex>
                     <Componentinput ref={(input) => { this.ex_ID = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>ex name</Componentindex>
+                    <Componentindex>EX_Name</Componentindex>
                     <Componentinput ref={(input) => { this.ex_name = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>type</Componentindex>
+                    <Componentindex>Type</Componentindex>
                     <Componentinput ref={(input) => { this.types = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>time slot</Componentindex>
+                    <Componentindex>Time_Slot</Componentindex>
                     <Componentinput ref={(input) => { this.time_slot = input }} />
                 </ComponentoptionWapper>
                 <ComponentoptionWapper>
-                    <Componentindex>frequency</Componentindex>
+                    <Componentindex>Frequency</Componentindex>
                     <Componentinput ref={(input) => { this.frequency = input }} />
                 </ComponentoptionWapper>
                 <Componentbutton onClick={() => this.props.exercisesendinfo(
@@ -78,13 +79,29 @@ class Exercises extends PureComponent {
                     this.time_slot,
                     this.frequency
                 )}>comfirm</Componentbutton>
+                <ComponentWapper>
+                    <ComponentoptionWapper>
+                        <Componentindex>EX_Name</Componentindex>
+                        <Componentindex>Type</Componentindex>
+                        <Componentindex>Time_Slot</Componentindex>
+                        <Componentindex>Frequency</Componentindex>
+                    </ComponentoptionWapper>
+                    {type === 2 && exercisedata && exercisedata.length > 0 && exercisedata.map((item, index) => (
+                        <ComponentoptionWapper key={index}>
+                            <Componentindex>{item.EX_Name}</Componentindex>
+                            <Componentindex>{item.Type}</Componentindex>
+                            <Componentindex>{item.Time_Slot}</Componentindex>
+                            <Componentindex>{item.Frequency}</Componentindex>
+                        </ComponentoptionWapper>
+                    ))}
+                </ComponentWapper>
             </ComponentWapper>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-
+    exercisedata: state.main.exercisedata
 })
 
 const mapDisptchToProps = (dispatch) => {
