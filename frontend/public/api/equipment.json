@@ -2,26 +2,31 @@
     "success": true,
     "equipments": [
         {
+            "Eq_ID": "222",
             "Name": "Treadmill",
             "Quantity": 1,
             "Cost": 25000
         },
         {
+            "Eq_ID": "222",
             "Name": "Spinning Bike",
             "Quantity": 1,
             "Cost": 20000
         },
         {
+            "Eq_ID": "222",
             "Name": "Dumbbell Set",
             "Quantity": 1,
             "Cost": 15000
         },
         {
+            "Eq_ID": "222",
             "Name": "Leg Press Machine",
             "Quantity": 1,
             "Cost": 35000
         },
         {
+            "Eq_ID": "222",
             "Name": "Lat Pulldown Machine",
             "Quantity": 1,
             "Cost": 50000
