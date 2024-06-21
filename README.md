@@ -126,7 +126,7 @@ npm start
 | :--- | :--- | :--- |
 | **Eq_ID** | Text | Primary key |
 | Name | Text | Not null |
-| Quantity | Integer | Default 10 <br> Domain: 10 to 1 |
+| Quantity | Integer | Not null <br> At least 1 |
 | Cost | Real | Not null |
 
 ` Exercises `
