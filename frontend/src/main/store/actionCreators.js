@@ -58,7 +58,7 @@ const memberdata = (result) => ({
   result
 })
 
-export const Subscriptionssendinfo = (type, Sub_ID, Price, Duration, Sub_Num) => {
+export const subscriptionssendinfo = (type, Sub_ID, Price, Duration, Sub_Num) => {
   return (dispatch) => {
     if (type === 1) {
       axios.post(`${API_URL}/subscriptions`, { Sub_ID, Price, Duration, Sub_Num }).then(() => { }).catch(() => { alert('fail') });

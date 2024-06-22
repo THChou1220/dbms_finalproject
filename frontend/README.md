@@ -6,12 +6,6 @@ npm start
 ```
 
 
-res.data
-res.data.trainers是錯的
-
-
-
-
 
 
 
