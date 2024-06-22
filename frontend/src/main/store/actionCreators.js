@@ -61,19 +61,19 @@ const memberdata = (result) => ({
 export const subscriptionssendinfo = (type, sub_ID, price, duration, sub_num) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/subcriptions`, { sub_ID, price, duration, sub_num }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/subscriptions`, { sub_ID, price, duration, sub_num }).then(() => { }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
-      axios.get(`${API_URL}/subcriptions`).then((res) => {
+      axios.get(`${API_URL}/subscriptions`).then((res) => {
         const result = res.data;
         dispatch(subscriptiondata(result));
       }).catch(() => { alert('fail') });
     }
     else if (type === 3) {
-      axios.patch(`${API_URL}/subcriptions/${sub_ID}`, { price, duration, sub_num }).then(() => { }).catch(() => { alert('fail') });
+      axios.patch(`${API_URL}/subscriptions/${sub_ID}`, { price, duration, sub_num }).then(() => { }).catch(() => { alert('fail') });
     }
     else {
-      axios.delete(`${API_URL}/subcriptions/${sub_ID}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/subscriptions/${sub_ID}`).then(() => { }).catch(() => { alert('fail') });
     }
   }
 }
