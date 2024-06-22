@@ -346,6 +346,20 @@ def get_subscription(Sub_ID):
     
     return jsonify(dict(subscription))
 
+@app.route('/subscriptions/<Sub_ID>/members', methods=['GET'])
+def get_members_of_subscription(Sub_ID):
+    conn = get_db_conn()
+    subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Sub_ID,)).fetchone()
+    conn.close()
+    if subscription is None:
+        return jsonify({'error': 'Subscription not found'}), 404
+    
+    conn = get_db_conn()
+    members = conn.execute('SELECT Members.Mem_ID as Member_ID, Members.M_Name as Member_Name FROM Subscriptions JOIN Members ON Subscriptions.Sub_ID = Members.Subs WHERE Sub_ID = ?', (Sub_ID,)).fetchall()
+    conn.close()
+    
+    return jsonify([dict(member) for member in members])
+
 @app.route('/subscriptions/<Sub_ID>', methods=['PATCH'])
 def update_subscription(Sub_ID):
     conn = get_db_conn()
@@ -517,6 +531,9 @@ def create_exercise():
     Time_Slot = new_exercise['Time_Slot']
     Frequency = new_exercise['Frequency']
     
+    if Type not in ["Upper Body", "Lower Body", "Arm"]:
+        return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm.'}), 400
+    
     conn = get_db_conn()
     conn.execute('INSERT INTO Exercises (EX_ID, EX_Name, Type, Time_Slot, Frequency) VALUES (?, ?, ?, ?, ?)', (EX_ID, EX_Name, Type, Time_Slot, Frequency))
     conn.commit()
@@ -576,6 +593,9 @@ def update_exercise(EX_ID):
     Type = update_data['Type']
     Time_Slot = update_data['Time_Slot']
     Frequency = update_data['Frequency']
+    
+    if Type not in ["Upper Body", "Lower Body", "Arm"]:
+        return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm.'}), 400
     
     conn = get_db_conn()
     conn.execute('UPDATE Exercises SET EX_Name = ?, Type = ?, Time_Slot = ?, Frequency = ? WHERE EX_ID = ?', (EX_Name, Type, Time_Slot, Frequency, EX_ID))
