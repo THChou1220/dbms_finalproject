@@ -79,7 +79,7 @@ npm start
 | T_Name | Text | Not null |
 | Email_ID | Text | Format: example@example&#8203;.com |
 | Phone | Text | Format: xxxx-xxx-xxx |
-| Gender | Text | Domain: Male, Female, Others |
+| Gender | Text | Not null <br> Domain: Male, Female, Others |
 | Hire_Date | Text | Not null |
 | Salary | Real | Not null <br> At least 50000 |
 
@@ -91,7 +91,7 @@ npm start
 | M_Name | Text | Not null |
 | Phone | Text | Format: xxxx-xxx-xxx |
 | Start_Date | Text | Not null |
-| Gender | Text | Domain: Male, Female, Others |
+| Gender | Text | Not null <br> Domain: Male, Female, Others |
 | *Subs* | Text | Foreign key <br> Not null |
 | Height | Real |  |
 | Weight | Real |  |
