@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
-import random, string
+import random, string, re
 
 import os
 database_path = os.path.join(os.path.dirname(__file__), 'gym.db')
@@ -25,6 +25,9 @@ def get_cur_Taiwan_date():
     formatted_date = taiwan_time.strftime('%Y-%m-%d')
     return formatted_date
 
+phone_pattern = re.compile(r'^\d{4}-\d{3}-\d{3}$')
+email_pattern = re.compile(r'^[^@]+@[^@]+\.[^@]+$')
+
 # Default route
 @app.route('/', methods=['GET'])
 def default():
@@ -37,14 +40,25 @@ def create_trainer():
     new_trainer = request.get_json()
     T_ID = generate_T_ID()
     T_Name = new_trainer['T_Name']
-    Email_ID = new_trainer['Email_ID']
-    Phone = new_trainer['Phone']
+    Email_ID = new_trainer.get('Email_ID', '')
+    Phone = new_trainer.get('Phone', '')
     Gender = new_trainer['Gender']
     Hire_Date = get_cur_Taiwan_date()
     Salary = new_trainer['Salary']
     
     if not new_trainer['T_Name'] or new_trainer['T_Name'] == "":
         return jsonify({'error': 'T_Name cannot be empty'}), 400
+    
+    if Email_ID:
+        if not email_pattern.match(Email_ID):
+            return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
+    
+    if Phone:
+        if not phone_pattern.match(Phone):
+            return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
+    
+    if Gender not in ["Male", "Female", "Others"]:
+        return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
     
     try:
         Salary = float(Salary)
@@ -131,6 +145,9 @@ def update_trainer(T_ID):
     if not update_data['T_Name'] or update_data['T_Name'] == "":
         return jsonify({'error': 'T_Name cannot be empty'}), 400
     
+    if Gender not in ["Male", "Female", "Others"]:
+        return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
+    
     try:
         Salary = float(Salary)
         if Salary < 50000:
@@ -167,24 +184,35 @@ def create_member():
     new_member = request.get_json()
     Mem_ID = generate_Mem_ID()
     M_Name = new_member['M_Name']
-    Phone = new_member['Phone']
+    Phone = new_member.get('Phone', '')
     Start_Date = get_cur_Taiwan_date()
     Gender = new_member['Gender']
     Subs = new_member['Subs']
     Height = new_member['Height']
     Weight = new_member['Weight']
     Age = new_member['Age']
-    Email_ID = new_member['Email_ID']
+    Email_ID = new_member.get('Email_ID', '')
     Trainer_ID = new_member['Trainer_ID']
     
     if not new_member['M_Name'] or new_member['M_Name'] == "":
         return jsonify({'error': 'M_Name cannot be empty'}), 400
+    
+    if Phone:
+        if not phone_pattern.match(Phone):
+            return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
+    
+    if Gender not in ["Male", "Female", "Others"]:
+        return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
     
     conn = get_db_conn()
     subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
     conn.close()
     if subscription is None:
         return jsonify({'error': 'Subscription not found'}), 404
+    
+    if Email_ID:
+        if not email_pattern.match(Email_ID):
+            return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
     
     conn = get_db_conn()
     trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (Trainer_ID,)).fetchone()
@@ -249,6 +277,9 @@ def update_member(Mem_ID):
     
     if not update_data['M_Name'] or update_data['M_Name'] == "":
         return jsonify({'error': 'M_Name cannot be empty'}), 400
+    
+    if Gender not in ["Male", "Female", "Others"]:
+        return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
     
     conn = get_db_conn()
     subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
@@ -331,7 +362,7 @@ def generate_Sub_ID():
 @app.route('/subscriptions', methods=['GET'])
 def get_subscriptions():
     conn = get_db_conn()
-    subscriptions = conn.execute('SELECT * FROM Subscriptions').fetchall()
+    subscriptions = conn.execute('SELECT * FROM Subscriptions ORDER BY Duration ASC, Price ASC').fetchall()
     conn.close()
     
     return jsonify([dict(subscription) for subscription in subscriptions])
@@ -532,7 +563,7 @@ def create_exercise():
     Frequency = new_exercise['Frequency']
     
     if Type not in ["Upper Body", "Lower Body", "Arm"]:
-        return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm.'}), 400
+        return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm'}), 400
     
     conn = get_db_conn()
     conn.execute('INSERT INTO Exercises (EX_ID, EX_Name, Type, Time_Slot, Frequency) VALUES (?, ?, ?, ?, ?)', (EX_ID, EX_Name, Type, Time_Slot, Frequency))
@@ -554,7 +585,7 @@ def generate_EX_ID():
 @app.route('/exercises', methods=['GET'])
 def get_exercises():
     conn = get_db_conn()
-    exercises = conn.execute('SELECT * FROM Exercises').fetchall()
+    exercises = conn.execute('SELECT * FROM Exercises ORDER BY CASE WHEN Type = "Arm" THEN 1 WHEN Type = "Upper Body" THEN 2 ELSE 3 END').fetchall()
     conn.close()
     
     exercises_list = []
@@ -595,7 +626,7 @@ def update_exercise(EX_ID):
     Frequency = update_data['Frequency']
     
     if Type not in ["Upper Body", "Lower Body", "Arm"]:
-        return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm.'}), 400
+        return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm'}), 400
     
     conn = get_db_conn()
     conn.execute('UPDATE Exercises SET EX_Name = ?, Type = ?, Time_Slot = ?, Frequency = ? WHERE EX_ID = ?', (EX_Name, Type, Time_Slot, Frequency, EX_ID))

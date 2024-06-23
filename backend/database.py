@@ -17,7 +17,7 @@ def init_db():
             T_Name TEXT NOT NULL,
             Email_ID TEXT,
             Phone TEXT,
-            Gender TEXT,
+            Gender TEXT NOT NULL CHECK (Gender IN ('Male', 'Female', 'Others')),
             Hire_Date TEXT NOT NULL,
             Salary REAL NOT NULL CHECK (Salary >= 50000)
         )
@@ -29,7 +29,7 @@ def init_db():
             M_Name TEXT NOT NULL,
             Phone TEXT,
             Start_Date TEXT NOT NULL,
-            Gender TEXT,
+            Gender TEXT NOT NULL CHECK (Gender IN ('Male', 'Female', 'Others')),
             Subs TEXT NOT NULL,
             Height REAL,
             Weight REAL,
