@@ -92,12 +92,12 @@ npm start
 | Phone | Text | Format: xxxx-xxx-xxx |
 | Start_Date | Text | |
 | Gender | Text | Domain: Male, Female, Others |
-| *Subs* | Text | Foreign key <br> Not null |
+| *Subs* | Text | Foreign key |
 | Height | Real |  |
 | Weight | Real |  |
 | Age | Integer |  |
 | Email_ID | Text | Format: example@example&#8203;.com |
-| *Trainer_ID* | Text | Foreign key <br> Not null |
+| *Trainer_ID* | Text | Foreign key |
 
 ` Subscriptions `
 
