@@ -8,34 +8,41 @@ trainers = [
         "Email_ID": "test1@test.com",
         "Phone": "0900-000-001",
         "Gender": "Male",
-        "Salary": 50000
+        "Salary": 70000
     },
     {
         "T_Name": "Test2",
         "Email_ID": "test2@test.com",
         "Phone": "0900-000-002",
         "Gender": "Female",
-        "Salary": 50000
+        "Salary": 70000
     },
     {
         "T_Name": "Test3",
         "Email_ID": "test3@test.com",
         "Phone": "0900-000-003",
         "Gender": "Male",
-        "Salary": 50000
+        "Salary": 60000
     },
     {
         "T_Name": "Test4",
         "Email_ID": "test4@test.com",
         "Phone": "0900-000-004",
         "Gender": "Female",
-        "Salary": 50000
+        "Salary": 60000
     },
     {
         "T_Name": "Test5",
         "Email_ID": "test5@test.com",
         "Phone": "0900-000-005",
         "Gender": "Male",
+        "Salary": 50000
+    },
+    {
+        "T_Name": "Test6",
+        "Email_ID": "test6@test.com",
+        "Phone": "0900-000-006",
+        "Gender": "Female",
         "Salary": 50000
     }
 ]
@@ -92,26 +99,46 @@ equipment_url = "http://127.0.0.1:5000/equipments"
 equipments = [
     {
         "Name": "Treadmill",
-        "Quantity": 1,
-        "Cost": 25000
+        "Quantity": 10,
+        "Cost": 250000
     },
     {
         "Name": "Spinning Bike",
-        "Quantity": 1,
-        "Cost": 20000
+        "Quantity": 10,
+        "Cost": 200000
     },
     {
         "Name": "Dumbbell Set",
-        "Quantity": 1,
-        "Cost": 15000
+        "Quantity": 2,
+        "Cost": 30000
     },
     {
         "Name": "Leg Press Machine",
-        "Quantity": 1,
-        "Cost": 35000
+        "Quantity": 2,
+        "Cost": 70000
     },
     {
         "Name": "Lat Pulldown Machine",
+        "Quantity": 1,
+        "Cost": 50000
+    },
+    {
+        "Name": "Stepper",
+        "Quantity": 2,
+        "Cost": 98000
+    },
+    {
+        "Name": "Barbell Set",
+        "Quantity": 2,
+        "Cost": 18000
+    },
+    {
+        "Name": "Seated Row Machine",
+        "Quantity": 3,
+        "Cost": 30000
+    },
+    {
+        "Name": "Chest Press Machine",
         "Quantity": 1,
         "Cost": 50000
     }
@@ -158,9 +185,33 @@ exercises = [
     {
         "EX_Name": "Lunge",
         "Type": "Lower Body",
-        "Time_Slot": 3,
-        "Frequency": 5
-    }
+        "Time_Slot": 5,
+        "Frequency": 3
+    },
+    {
+        "EX_Name": "Pull Up",
+        "Type": "Upper Body",
+        "Time_Slot": 2,
+        "Frequency": 3
+    },
+    {
+        "EX_Name": "Front Raise",
+        "Type": "Arm",
+        "Time_Slot": 2,
+        "Frequency": 3
+    },
+    {
+        "EX_Name": "Later Raise",
+        "Type": "Arm",
+        "Time_Slot": 2,
+        "Frequency": 3
+    },
+    {
+        "EX_Name": "Biceps Curl",
+        "Type": "Arm",
+        "Time_Slot": 2,
+        "Frequency": 3
+    },
 ]
 
 def create_exercise(exercise):

@@ -85,7 +85,7 @@ def generate_T_ID():
 @app.route('/trainers', methods=['GET'])
 def get_trainers():
     conn = get_db_conn()
-    trainers = conn.execute('SELECT * FROM Trainers').fetchall()
+    trainers = conn.execute('SELECT * FROM Trainers ORDER BY T_Name ASC, Hire_Date ASC').fetchall()
     conn.close()
     
     trainers_list = []
@@ -287,7 +287,7 @@ def generate_Mem_ID():
 @app.route('/members', methods=['GET'])
 def get_members():
     conn = get_db_conn()
-    members = conn.execute('SELECT * FROM Members').fetchall()
+    members = conn.execute('SELECT * FROM Members ORDER BY M_Name ASC, Start_Date ASC').fetchall()
     conn.close()
     
     return jsonify([dict(member) for member in members])
@@ -301,6 +301,34 @@ def get_member(Mem_ID):
         return jsonify({'error': 'Member not found'}), 404
     
     return jsonify(dict(member))
+
+@app.route('/members/<Mem_ID>/use', methods=['GET'])
+def get_equipments_member_use(Mem_ID):
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    
+    conn = get_db_conn()
+    equipments = conn.execute('SELECT Use.Equipment_ID, Equipments.Name as Equipment_Name FROM Members JOIN Use ON Members.Mem_ID = Use.Member_ID JOIN Equipments ON Use.Equipment_ID = Equipments.Eq_ID WHERE Members.Mem_ID = ?', (Mem_ID,)).fetchall()
+    conn.close()
+    
+    return jsonify([dict(equipment) for equipment in equipments])
+
+@app.route('/members/<Mem_ID>/do', methods=['GET'])
+def get_exercises_member_do(Mem_ID):
+    conn = get_db_conn()
+    member = conn.execute('SELECT * FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()
+    conn.close()
+    if member is None:
+        return jsonify({'error': 'Member not found'}), 404
+    
+    conn = get_db_conn()
+    exercises = conn.execute('SELECT Do.Exercise_ID, Exercises.EX_Name as Exercise_Name FROM Members JOIN Do ON Members.Mem_ID = Do.Member_ID JOIN Exercises ON Do.Exercise_ID = Exercises.EX_ID WHERE Members.Mem_ID = ?', (Mem_ID,)).fetchall()
+    conn.close()
+    
+    return jsonify([dict(exercise) for exercise in exercises])
 
 @app.route('/members/<Mem_ID>', methods=['PATCH'])
 def update_member(Mem_ID):
@@ -506,6 +534,20 @@ def get_members_of_subscription(Sub_ID):
     
     return jsonify([dict(member) for member in members])
 
+@app.route('/subscriptions/<Sub_ID>/consist', methods=['GET'])
+def get_subscription_consist(Sub_ID):
+    conn = get_db_conn()
+    subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Sub_ID,)).fetchone()
+    conn.close()
+    if subscription is None:
+        return jsonify({'error': 'Subscription not found'}), 404
+    
+    conn = get_db_conn()
+    exercises = conn.execute('SELECT Consist.Exercise_ID, Exercises.EX_Name as Exercise_Name FROM subscriptions JOIN Consist ON Subscriptions.Sub_ID = Consist.Sub_Pack JOIN Exercises ON Consist.Exercise_ID = Exercises.EX_ID WHERE Subscriptions.Sub_ID = ?', (Sub_ID,)).fetchall()
+    conn.close()
+    
+    return jsonify([dict(exercise) for exercise in exercises])
+
 @app.route('/subscriptions/<Sub_ID>', methods=['PATCH'])
 def update_subscription(Sub_ID):
     conn = get_db_conn()
@@ -618,7 +660,7 @@ def generate_Eq_ID():
 @app.route('/equipments', methods=['GET'])
 def get_equipments():
     conn = get_db_conn()
-    equipments = conn.execute('SELECT * FROM Equipments').fetchall()
+    equipments = conn.execute('SELECT * FROM Equipments ORDER BY Name ASC').fetchall()
     conn.close()
     
     return jsonify([dict(equipment) for equipment in equipments])
@@ -753,7 +795,7 @@ def generate_EX_ID():
 @app.route('/exercises', methods=['GET'])
 def get_exercises():
     conn = get_db_conn()
-    exercises = conn.execute('SELECT * FROM Exercises ORDER BY CASE WHEN Type = "Arm" THEN 1 WHEN Type = "Upper Body" THEN 2 ELSE 3 END').fetchall()
+    exercises = conn.execute('SELECT * FROM Exercises ORDER BY CASE WHEN Type = "Arm" THEN 1 WHEN Type = "Upper Body" THEN 2 ELSE 3 END, EX_Name ASC').fetchall()
     conn.close()
     
     exercises_list = []
@@ -892,7 +934,7 @@ def create_use():
 @app.route('/use', methods=['GET'])
 def get_use():
     conn = get_db_conn()
-    all_use = conn.execute('SELECT Members.M_Name as Member, Use.Member_ID, Equipments.Name as Equipment, Use.Equipment_ID FROM Use JOIN Members ON Use.Member_ID = Members.Mem_ID JOIN Equipments ON Use.Equipment_ID = Equipments.Eq_ID').fetchall()
+    all_use = conn.execute('SELECT Members.M_Name as Member, Use.Member_ID, Equipments.Name as Equipment, Use.Equipment_ID FROM Use JOIN Members ON Use.Member_ID = Members.Mem_ID JOIN Equipments ON Use.Equipment_ID = Equipments.Eq_ID ORDER BY Use.Member_ID ASC, Use.Equipment_ID ASC').fetchall()
     conn.close()
     
     return jsonify([dict(use) for use in all_use])
@@ -958,7 +1000,7 @@ def create_do():
 @app.route('/do', methods=['GET'])
 def get_do():
     conn = get_db_conn()
-    all_do = conn.execute('SELECT Members.M_Name as Member, Do.Member_ID, Exercises.EX_Name as Exercise, Do.Exercise_ID FROM Do JOIN Members ON Do.Member_ID = Members.Mem_ID JOIN Exercises ON Do.Exercise_ID = Exercises.EX_ID').fetchall()
+    all_do = conn.execute('SELECT Members.M_Name as Member, Do.Member_ID, Exercises.EX_Name as Exercise, Do.Exercise_ID FROM Do JOIN Members ON Do.Member_ID = Members.Mem_ID JOIN Exercises ON Do.Exercise_ID = Exercises.EX_ID ORDER BY Do.Member_ID ASC, Do.Exercise_ID ASC').fetchall()
     conn.close()
     
     return jsonify([dict(do) for do in all_do])
@@ -1024,7 +1066,7 @@ def create_consist():
 @app.route('/consist', methods=['GET'])
 def get_consist():
     conn = get_db_conn()
-    all_consist = conn.execute('SELECT Subscriptions.Duration, Consist.Sub_Pack, Exercises.EX_Name as Exercise, Consist.Exercise_ID FROM Consist JOIN Subscriptions ON Consist.Sub_Pack = Subscriptions.Sub_ID JOIN Exercises ON Consist.Exercise_ID = Exercises.EX_ID').fetchall()
+    all_consist = conn.execute('SELECT Subscriptions.Duration, Consist.Sub_Pack, Exercises.EX_Name as Exercise, Consist.Exercise_ID FROM Consist JOIN Subscriptions ON Consist.Sub_Pack = Subscriptions.Sub_ID JOIN Exercises ON Consist.Exercise_ID = Exercises.EX_ID ORDER BY Consist.Sub_Pack ASC, Consist.Exercise_ID').fetchall()
     conn.close()
     
     return jsonify([dict(consist) for consist in all_consist])
