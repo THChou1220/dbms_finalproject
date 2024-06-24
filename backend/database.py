@@ -31,9 +31,9 @@ def init_db():
             Start_Date TEXT NOT NULL,
             Gender TEXT NOT NULL CHECK (Gender IN ('Male', 'Female', 'Others')),
             Subs TEXT NOT NULL,
-            Height REAL,
-            Weight REAL,
-            Age INTEGER,
+            Height REAL CHECK (Height > 0),
+            Weight REAL CHECK (Weight > 0),
+            Age INTEGER CHECK (Age >= 0),
             Email_ID TEXT,
             Trainer_ID TEXT NOT NULL,
             FOREIGN KEY (Trainer_ID) REFERENCES Trainers(T_ID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -44,7 +44,7 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Subscriptions (
             Sub_ID TEXT PRIMARY KEY,
-            Price REAL NOT NULL,
+            Price REAL NOT NULL CHECK (Price >= 0),
             Duration INTEGER NOT NULL CHECK (Duration >= 1),
             Sub_Num INTEGER DEFAULT 0
         )
@@ -65,7 +65,7 @@ def init_db():
             Eq_ID TEXT PRIMARY KEY,
             Name TEXT NOT NULL,
             Quantity INTEGER NOT NULL CHECK (Quantity >= 1),
-            Cost REAL NOT NULL
+            Cost REAL NOT NULL CHECK (Cost >= 0)
         )
     ''')
 
@@ -84,8 +84,8 @@ def init_db():
             EX_ID TEXT PRIMARY KEY,
             EX_Name TEXT NOT NULL,
             Type TEXT NOT NULL CHECK (Type IN ('Upper Body', 'Lower Body', 'Arm')),
-            Time_Slot INTEGER NOT NULL,
-            Frequency INTEGER NOT NULL
+            Time_Slot INTEGER NOT NULL CHECK (Time_Slot >= 1),
+            Frequency INTEGER NOT NULL CHECK (Frequency >= 1)
         )
     ''')
 

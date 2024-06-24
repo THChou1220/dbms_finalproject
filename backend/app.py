@@ -135,25 +135,40 @@ def update_trainer(T_ID):
     if trainer is None:
         return jsonify({'error': 'Trainer not found'}), 404
     
+    trainer_dict = dict(trainer)
+    trainer_dict['T_id'] = trainer_dict.pop('T_ID')
+    trainer = trainer_dict
+    
     update_data = request.get_json()
-    T_Name = update_data['T_Name']
-    Email_ID = update_data['Email_ID']
-    Phone = update_data['Phone']
-    Gender = update_data['Gender']
-    Salary = update_data['Salary']
+    T_Name = update_data.get('T_Name', trainer['T_Name'])
+    Email_ID = update_data.get('Email_ID', trainer['Email_ID'])
+    Phone = update_data.get('Phone', trainer['Phone'])
+    Gender = update_data.get('Gender', trainer['Gender'])
+    Salary = update_data.get('Salary', trainer['Salary'])
     
-    if not update_data['T_Name'] or update_data['T_Name'] == "":
-        return jsonify({'error': 'T_Name cannot be empty'}), 400
+    if 'T_Name' in update_data:
+        if T_Name == "":
+            return jsonify({'error': 'T_Name cannot be empty'}), 400
     
-    if Gender not in ["Male", "Female", "Others"]:
-        return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
+    if 'Email_ID' in update_data:
+        if not email_pattern.match(Email_ID):
+            return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
     
-    try:
-        Salary = float(Salary)
-        if Salary < 50000:
-            return jsonify({'error': 'Salary must be at least 50000'}), 400
-    except ValueError:
-        return jsonify({'error': 'Salary must be numeric'}), 400
+    if 'Phone' in update_data:
+        if not phone_pattern.match(Phone):
+            return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
+        
+    if 'Gender' in update_data:
+        if Gender not in ["Male", "Female", "Others"]:
+            return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
+        
+    if 'Salary' in update_data:
+        try:
+            Salary = float(Salary)
+            if Salary < 50000:
+                return jsonify({'error': 'Salary must be at least 50000'}), 400
+        except ValueError:
+            return jsonify({'error': 'Salary must be numeric'}), 400
     
     conn = get_db_conn()
     conn.execute('UPDATE Trainers SET T_Name = ?, Email_ID = ?, Phone = ?, Gender = ?, Salary = ? WHERE T_ID = ?', (T_Name, Email_ID, Phone, Gender, Salary, T_ID))
@@ -188,9 +203,9 @@ def create_member():
     Start_Date = get_cur_Taiwan_date()
     Gender = new_member['Gender']
     Subs = new_member['Subs']
-    Height = new_member['Height']
-    Weight = new_member['Weight']
-    Age = new_member['Age']
+    Height = new_member.get('Height','')
+    Weight = new_member.get('Weight','')
+    Age = new_member.get('Age','')
     Email_ID = new_member.get('Email_ID', '')
     Trainer_ID = new_member['Trainer_ID']
     
@@ -209,6 +224,31 @@ def create_member():
     conn.close()
     if subscription is None:
         return jsonify({'error': 'Subscription not found'}), 404
+    
+    if Height:
+        try:
+            Height = float(Height)
+            if Height <= 0:
+                return jsonify({'error': 'Height must be positive'})
+        except ValueError:
+            return jsonify({'error': 'Height must be numeric'}), 400
+        
+    if Weight:
+        try:
+            Weight = float(Weight)
+            if Weight <= 0:
+                return jsonify({'error': 'Weight must be positive'})
+        except ValueError:
+            return jsonify({'error': 'Weight must be numeric'}), 400
+    if Age:
+        try:
+            Age = int(Age)
+            if isinstance(new_member['Age'], float):
+                return jsonify({'error': 'Age must be an integer'}), 400
+            if Age < 0:
+                return jsonify({'error': 'Age must be positive or 0'})
+        except ValueError:
+            return jsonify({'error': 'Age must be an integer'}), 400
     
     if Email_ID:
         if not email_pattern.match(Email_ID):
@@ -332,6 +372,8 @@ def create_subscription():
     
     try:
         Price = float(Price)
+        if Price < 0:
+            return jsonify({'error': 'Price must be positive or 0'})
     except ValueError:
         return jsonify({'error': 'Price must be numeric'}), 400
     
@@ -339,6 +381,8 @@ def create_subscription():
         Duration = int(Duration)
         if isinstance(new_subscription['Duration'], float):
             return jsonify({'error': 'Duration must be an integer'}), 400
+        if Duration < 1:
+            return jsonify({'error': 'Duration must be at least 1'})
     except ValueError:
         return jsonify({'error': 'Duration must be an integer'}), 400
     
@@ -461,6 +505,8 @@ def create_equipment():
     
     try:
         Cost = float(Cost)
+        if Cost < 0:
+            return jsonify({'error': 'Cost must be positive or 0'})
     except ValueError:
         return jsonify({'error': 'Cost must be numeric'}), 400
     
@@ -564,6 +610,24 @@ def create_exercise():
     
     if Type not in ["Upper Body", "Lower Body", "Arm"]:
         return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm'}), 400
+    
+    try:
+        Time_Slot = int(Time_Slot)
+        if isinstance(new_exercise['Time_Slot'], float):
+            return jsonify({'error': 'Time_Slot must be an integer'}), 400
+        if Time_Slot < 1:
+            return jsonify({'error': 'Time_Slot must be at least 1'})
+    except ValueError:
+        return jsonify({'error': 'Time_Slot must be an integer'}), 400
+    
+    try:
+        Frequency = int(Frequency)
+        if isinstance(new_exercise['Frequency'], float):
+            return jsonify({'error': 'Frequency must be an integer'}), 400
+        if Frequency < 1:
+            return jsonify({'error': 'Frequency must be at least 1'})
+    except ValueError:
+        return jsonify({'error': 'Frequency must be an integer'}), 400
     
     conn = get_db_conn()
     conn.execute('INSERT INTO Exercises (EX_ID, EX_Name, Type, Time_Slot, Frequency) VALUES (?, ?, ?, ?, ?)', (EX_ID, EX_Name, Type, Time_Slot, Frequency))
