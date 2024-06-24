@@ -76,22 +76,22 @@ npm start
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | **T_ID** | Text | Primary key |
-| T_Name | Text | Not null |
+| T_Name | Text | |
 | Email_ID | Text | Format: example@example&#8203;.com |
 | Phone | Text | Format: xxxx-xxx-xxx |
-| Gender | Text | Not null <br> Domain: Male, Female, Others |
-| Hire_Date | Text | Not null |
-| Salary | Real | Not null <br> At least 50000 |
+| Gender | Text | Domain: Male, Female, Others |
+| Hire_Date | Text | |
+| Salary | Real | At least 50000 |
 
 ` Members `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | **Mem_ID** | Text | Primary key |
-| M_Name | Text | Not null |
+| M_Name | Text | |
 | Phone | Text | Format: xxxx-xxx-xxx |
-| Start_Date | Text | Not null |
-| Gender | Text | Not null <br> Domain: Male, Female, Others |
+| Start_Date | Text | |
+| Gender | Text | Domain: Male, Female, Others |
 | *Subs* | Text | Foreign key <br> Not null |
 | Height | Real |  |
 | Weight | Real |  |
@@ -104,8 +104,8 @@ npm start
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | **Sub_ID** | Text | Primary key |
-| Price | Real | Not null |
-| Duration | Integer | Not null <br> At least 1 |
+| Price | Real | |
+| Duration | Integer | At least 1 |
 | Sub_Num | Integer | Default 0 |
 
 ` Equipments `
@@ -113,19 +113,19 @@ npm start
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | **Eq_ID** | Text | Primary key |
-| Name | Text | Not null |
-| Quantity | Integer | Not null <br> At least 1 |
-| Cost | Real | Not null |
+| Name | Text | |
+| Quantity | Integer | At least 1 |
+| Cost | Real |  |
 
 ` Exercises `
 
 | Atrribute | Type | |
 | :--- | :--- | :--- |
 | **EX_ID** | Text | Primary key |
-| EX_Name | Text | Not null |
-| Type | Text | Not null <br> Domain: Upper Body, Lower Body, Arm |
-| Time_Slot | Integer | Not null <br> Unit: minutes per time <br> At least 1 |
-| Frequency | Integer | Not null <br> Unit: times per week <br> At least 1 |
+| EX_Name | Text | |
+| Type | Text | Domain: Upper Body, Lower Body, Arm |
+| Time_Slot | Integer | Unit: minutes per time <br> At least 1 |
+| Frequency | Integer | Unit: times per week <br> At least 1 |
 
 ` Use `
 
