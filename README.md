@@ -124,8 +124,8 @@ npm start
 | **EX_ID** | Text | Primary key |
 | EX_Name | Text | Not null |
 | Type | Text | Not null <br> Domain: Upper Body, Lower Body, Arm |
-| Time_Slot | Integer | Not null |
-| Frequency | Integer | Not null |
+| Time_Slot | Integer | Not null <br> Unit: minutes per time |
+| Frequency | Integer | Not null <br> Unit: times per week |
 
 ` Use `
 
