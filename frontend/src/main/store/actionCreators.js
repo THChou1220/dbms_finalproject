@@ -86,7 +86,7 @@ const subscriptiondata = (result) => ({
 export const consistsendinfo = (type, Sub_Pack, Exercise_ID) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/consist`, { Sub_Pack, Exercise_ID }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/consist`, { Sub_Pack, Exercise_ID }).then(() => { console.log('Relation-Consist created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/consist`).then((res) => {
@@ -94,11 +94,8 @@ export const consistsendinfo = (type, Sub_Pack, Exercise_ID) => {
         dispatch(consistdata(result));
       }).catch(() => { alert('fail') });
     }
-    else if (type === 3) {
-      axios.patch(`${API_URL}/consist/${Sub_Pack}`, { Exercise_ID }).then(() => { }).catch(() => { alert('fail') });
-    }
     else {
-      axios.delete(`${API_URL}/consist/${Sub_Pack}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/consist`, { data:{Sub_Pack: Sub_Pack, Exercise_ID: Exercise_ID}}).then(() => { console.log('Relation-Consist deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
@@ -136,7 +133,7 @@ const equipmentdata = (result) => ({
 export const usesendinfo = (type, Member_ID, Equipment_ID) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/use`, { Member_ID, Equipment_ID }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/use`, { Member_ID, Equipment_ID }).then(() => { console.log('Relation-Use created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/use`).then((res) => {
@@ -144,11 +141,8 @@ export const usesendinfo = (type, Member_ID, Equipment_ID) => {
         dispatch(usedata(result));
       }).catch(() => { alert('fail') });
     }
-    else if (type === 3) {
-      axios.patch(`${API_URL}/use/${Member_ID}`, { Equipment_ID }).then(() => { }).catch(() => { alert('fail') });
-    }
     else {
-      axios.delete(`${API_URL}/use/${Member_ID}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/use`, { data:{Member_ID: Member_ID, Equipment_ID: Equipment_ID}}).then(() => { console.log('Relation-Consist deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
@@ -186,7 +180,7 @@ const exercisedata = (result) => ({
 export const dosendinfo = (type, Member_ID, Exercise_ID) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/do`, { Member_ID, Exercise_ID }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/do`, { Member_ID, Exercise_ID }).then(() => { console.log('Relation-Do created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/do`).then((res) => {
@@ -194,11 +188,8 @@ export const dosendinfo = (type, Member_ID, Exercise_ID) => {
         dispatch(dodata(result));
       }).catch(() => { alert('fail') });
     }
-    else if (type === 3) {
-      axios.patch(`${API_URL}/do/${Member_ID}`, { Exercise_ID }).then(() => { }).catch(() => { alert('fail') });
-    }
     else {
-      axios.delete(`${API_URL}/do/${Member_ID}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/do`, { data:{Member_ID: Member_ID, Exercise_ID: Exercise_ID}}).then(() => { console.log('Relation-Do deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
