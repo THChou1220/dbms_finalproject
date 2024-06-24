@@ -40,8 +40,8 @@ def create_trainer():
     new_trainer = request.get_json()
     T_ID = generate_T_ID()
     T_Name = new_trainer['T_Name']
-    Email_ID = new_trainer.get('Email_ID', '')
-    Phone = new_trainer.get('Phone', '')
+    Email_ID = new_trainer['Email_ID']
+    Phone = new_trainer['Phone']
     Gender = new_trainer['Gender']
     Hire_Date = get_cur_Taiwan_date()
     Salary = new_trainer['Salary']
@@ -49,13 +49,11 @@ def create_trainer():
     if not new_trainer['T_Name'] or new_trainer['T_Name'] == "":
         return jsonify({'error': 'T_Name cannot be empty'}), 400
     
-    if Email_ID:
-        if not email_pattern.match(Email_ID):
-            return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
+    if not email_pattern.match(Email_ID):
+        return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
     
-    if Phone:
-        if not phone_pattern.match(Phone):
-            return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
+    if not phone_pattern.match(Phone):
+        return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
     
     if Gender not in ["Male", "Female", "Others"]:
         return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
@@ -135,44 +133,56 @@ def update_trainer(T_ID):
     if trainer is None:
         return jsonify({'error': 'Trainer not found'}), 404
     
-    trainer_dict = dict(trainer)
-    trainer_dict['T_id'] = trainer_dict.pop('T_ID')
-    trainer = trainer_dict
-    
     update_data = request.get_json()
-    T_Name = update_data.get('T_Name', trainer['T_Name'])
-    Email_ID = update_data.get('Email_ID', trainer['Email_ID'])
-    Phone = update_data.get('Phone', trainer['Phone'])
-    Gender = update_data.get('Gender', trainer['Gender'])
-    Salary = update_data.get('Salary', trainer['Salary'])
+    T_Name = update_data['T_Name']
+    Email_ID = update_data['Email_ID']
+    Phone = update_data['Phone']
+    Gender = update_data['Gender']
+    Salary = update_data['Salary']
     
-    if 'T_Name' in update_data:
-        if T_Name == "":
-            return jsonify({'error': 'T_Name cannot be empty'}), 400
+    fields_to_update = []
+    values_to_update = []
     
-    if 'Email_ID' in update_data:
+    if update_data['T_Name'] != "":
+        fields_to_update.append('T_Name = ?')
+        values_to_update.append(T_Name)
+    
+    if update_data['Email_ID'] != "":
         if not email_pattern.match(Email_ID):
             return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
+        fields_to_update.append('Email_ID = ?')
+        values_to_update.append(Email_ID)
     
-    if 'Phone' in update_data:
+    if update_data['Phone'] != "":
         if not phone_pattern.match(Phone):
             return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
+        fields_to_update.append('Phone = ?')
+        values_to_update.append(Phone)
         
-    if 'Gender' in update_data:
+    if update_data['Gender'] != "":
         if Gender not in ["Male", "Female", "Others"]:
             return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
+        fields_to_update.append('Gender = ?')
+        values_to_update.append(Gender)
+
         
-    if 'Salary' in update_data:
+    if update_data['Salary'] != "":
         try:
             Salary = float(Salary)
             if Salary < 50000:
                 return jsonify({'error': 'Salary must be at least 50000'}), 400
         except ValueError:
             return jsonify({'error': 'Salary must be numeric'}), 400
+        fields_to_update.append('Salary = ?')
+        values_to_update.append(Salary)
+    
+    values_to_update.append(T_ID)
     
     conn = get_db_conn()
-    conn.execute('UPDATE Trainers SET T_Name = ?, Email_ID = ?, Phone = ?, Gender = ?, Salary = ? WHERE T_ID = ?', (T_Name, Email_ID, Phone, Gender, Salary, T_ID))
-    conn.commit()
+    if fields_to_update:
+        query = f"UPDATE Trainers SET {', '.join(fields_to_update)} WHERE T_ID = ?"
+        conn.execute(query, tuple(values_to_update))
+        conn.commit()
     conn.close()
     
     return jsonify({'message': 'Trainer updated'})
@@ -199,22 +209,21 @@ def create_member():
     new_member = request.get_json()
     Mem_ID = generate_Mem_ID()
     M_Name = new_member['M_Name']
-    Phone = new_member.get('Phone', '')
+    Phone = new_member['Phone']
     Start_Date = get_cur_Taiwan_date()
     Gender = new_member['Gender']
     Subs = new_member['Subs']
-    Height = new_member.get('Height','')
-    Weight = new_member.get('Weight','')
-    Age = new_member.get('Age','')
-    Email_ID = new_member.get('Email_ID', '')
+    Height = new_member['Height']
+    Weight = new_member['Weight']
+    Age = new_member['Age']
+    Email_ID = new_member['Email_ID']
     Trainer_ID = new_member['Trainer_ID']
     
     if not new_member['M_Name'] or new_member['M_Name'] == "":
         return jsonify({'error': 'M_Name cannot be empty'}), 400
-    
-    if Phone:
-        if not phone_pattern.match(Phone):
-            return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
+
+    if not phone_pattern.match(Phone):
+        return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
     
     if Gender not in ["Male", "Female", "Others"]:
         return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
@@ -225,34 +234,31 @@ def create_member():
     if subscription is None:
         return jsonify({'error': 'Subscription not found'}), 404
     
-    if Height:
-        try:
-            Height = float(Height)
-            if Height <= 0:
-                return jsonify({'error': 'Height must be positive'})
-        except ValueError:
-            return jsonify({'error': 'Height must be numeric'}), 400
+    try:
+        Height = float(Height)
+        if Height <= 0:
+            return jsonify({'error': 'Height must be positive'}), 400
+    except ValueError:
+        return jsonify({'error': 'Height must be numeric'}), 400
         
-    if Weight:
-        try:
-            Weight = float(Weight)
-            if Weight <= 0:
-                return jsonify({'error': 'Weight must be positive'})
-        except ValueError:
-            return jsonify({'error': 'Weight must be numeric'}), 400
-    if Age:
-        try:
-            Age = int(Age)
-            if isinstance(new_member['Age'], float):
-                return jsonify({'error': 'Age must be an integer'}), 400
-            if Age < 0:
-                return jsonify({'error': 'Age must be positive or 0'})
-        except ValueError:
-            return jsonify({'error': 'Age must be an integer'}), 400
+    try:
+        Weight = float(Weight)
+        if Weight <= 0:
+            return jsonify({'error': 'Weight must be positive'}), 400
+    except ValueError:
+        return jsonify({'error': 'Weight must be numeric'}), 400
     
-    if Email_ID:
-        if not email_pattern.match(Email_ID):
-            return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
+    try:
+        Age = int(Age)
+        if isinstance(new_member['Age'], float):
+            return jsonify({'error': 'Age must be an integer'}), 400
+        if Age < 0:
+            return jsonify({'error': 'Age must be positive or 0'}), 400
+    except ValueError:
+        return jsonify({'error': 'Age must be an integer'}), 400
+    
+    if not email_pattern.match(Email_ID):
+        return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
     
     conn = get_db_conn()
     trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (Trainer_ID,)).fetchone()
@@ -315,31 +321,96 @@ def update_member(Mem_ID):
     Email_ID = update_data['Email_ID']
     Trainer_ID = update_data['Trainer_ID']
     
-    if not update_data['M_Name'] or update_data['M_Name'] == "":
-        return jsonify({'error': 'M_Name cannot be empty'}), 400
+    fields_to_update = []
+    values_to_update = []
     
-    if Gender not in ["Male", "Female", "Others"]:
-        return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
+    if update_data['M_Name'] != "":
+        fields_to_update.append('M_Name = ?')
+        values_to_update.append(M_Name)
     
-    conn = get_db_conn()
-    subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
-    conn.close()
-    if subscription is None:
-        return jsonify({'error': 'Subscription not found'}), 404
+    if update_data['Phone'] != "":
+        if not phone_pattern.match(Phone):
+            return jsonify({'error': 'Phone must be in format xxxx-xxx-xxx'}), 400
+        fields_to_update.append('Phone = ?')
+        values_to_update.append(Phone)
     
-    conn = get_db_conn()
-    trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (Trainer_ID,)).fetchone()
-    conn.close()
-    if trainer is None:
-        return jsonify({'error': 'Trainer not found'}), 404
+    if update_data['Gender'] != "":
+        if Gender not in ["Male", "Female", "Others"]:
+            return jsonify({'error': 'Gender must be Male, Female, Others'}), 400
+        fields_to_update.append('Gender = ?')
+        values_to_update.append(Gender)
+    
+    if update_data['Subs'] != "":
+        conn = get_db_conn()
+        subscription = conn.execute('SELECT * FROM Subscriptions WHERE Sub_ID = ?', (Subs,)).fetchone()
+        conn.close()
+        if subscription is None:
+            return jsonify({'error': 'Subscription not found'}), 404
+        fields_to_update.append('Subs = ?')
+        values_to_update.append(Subs)
+    
+    if update_data['Height'] != "":
+        try:
+            Height = float(Height)
+            if Height <= 0:
+                return jsonify({'error': 'Height must be positive'}), 400
+        except ValueError:
+            return jsonify({'error': 'Height must be numeric'}), 400
+        fields_to_update.append('Height = ?')
+        values_to_update.append(Height)
+    
+    if update_data['Weight'] != "":    
+        try:
+            Weight = float(Weight)
+            if Weight <= 0:
+                return jsonify({'error': 'Weight must be positive'}), 400
+        except ValueError:
+            return jsonify({'error': 'Weight must be numeric'}), 400
+        fields_to_update.append('Weight = ?')
+        values_to_update.append(Weight)
+    
+    if update_data['Age'] != "":
+        try:
+            Age = int(Age)
+            if isinstance(update_data['Age'], float):
+                return jsonify({'error': 'Age must be an integer'}), 400
+            if Age < 0:
+                return jsonify({'error': 'Age must be positive or 0'})
+        except ValueError:
+            return jsonify({'error': 'Age must be an integer'}), 400
+        fields_to_update.append('Age = ?')
+        values_to_update.append(Age)
+    
+    if update_data['Email_ID'] != "":
+        if not email_pattern.match(Email_ID):
+            return jsonify({'error': 'Email_ID must be in format example@example.com'}), 400
+        fields_to_update.append('Email_ID = ?')
+        values_to_update.append(Email_ID)
+    
+    if update_data['Trainer_ID'] != "":
+        conn = get_db_conn()
+        trainer = conn.execute('SELECT * FROM Trainers WHERE T_ID = ?', (Trainer_ID,)).fetchone()
+        conn.close()
+        if trainer is None:
+            return jsonify({'error': 'Trainer not found'}), 404
+        fields_to_update.append('Trainer_ID = ?')
+        values_to_update.append(Trainer_ID)
     
     conn = get_db_conn()
     oldSubs = conn.execute('SELECT Subs FROM Members WHERE Mem_ID = ?', (Mem_ID,)).fetchone()[0]
-    conn.execute('UPDATE Members SET M_Name = ?, Phone = ?, Gender = ?, Subs = ?, Height = ?, Weight = ?, Age = ?, Email_ID = ?, Trainer_ID = ? WHERE Mem_ID = ?', (M_Name, Phone, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID, Mem_ID))
     if oldSubs != Subs:
         conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num - 1 WHERE Sub_ID = ?', (oldSubs,))
         conn.execute('UPDATE Subscriptions SET Sub_Num = Sub_Num + 1 WHERE Sub_ID = ?', (Subs,))
     conn.commit()
+    conn.close()
+    
+    values_to_update.append(Mem_ID)
+    
+    conn = get_db_conn()
+    if fields_to_update:
+        query = f"UPDATE Members SET {', '.join(fields_to_update)} WHERE Mem_ID = ?"
+        conn.execute(query, tuple(values_to_update))
+        conn.commit()
     conn.close()
     
     return jsonify({'message': 'Member updated'})
@@ -373,7 +444,7 @@ def create_subscription():
     try:
         Price = float(Price)
         if Price < 0:
-            return jsonify({'error': 'Price must be positive or 0'})
+            return jsonify({'error': 'Price must be positive or 0'}), 400
     except ValueError:
         return jsonify({'error': 'Price must be numeric'}), 400
     
@@ -382,7 +453,7 @@ def create_subscription():
         if isinstance(new_subscription['Duration'], float):
             return jsonify({'error': 'Duration must be an integer'}), 400
         if Duration < 1:
-            return jsonify({'error': 'Duration must be at least 1'})
+            return jsonify({'error': 'Duration must be at least 1'}), 400
     except ValueError:
         return jsonify({'error': 'Duration must be an integer'}), 400
     
@@ -443,25 +514,42 @@ def update_subscription(Sub_ID):
     if subscription is None:
         return jsonify({'error': 'Subscription not found'}), 404
     
+    fields_to_update = []
+    values_to_update = []
+    
     update_data = request.get_json()
     Price = update_data['Price']
     Duration = update_data['Duration']
     
-    try:
-        Price = float(Price)
-    except ValueError:
-        return jsonify({'error': 'Price must be numeric'}), 400
+    if update_data['Price'] != "":
+        try:
+            Price = float(Price)
+            if Price < 0:
+                return jsonify({'error': 'Price must be positive or 0'}), 400
+        except ValueError:
+            return jsonify({'error': 'Price must be numeric'}), 400
+        fields_to_update.append('Price = ?')
+        values_to_update.append(Price)
     
-    try:
-        Duration = int(Duration)
-        if isinstance(update_data['Duration'], float):
+    if update_data['Duration'] != "":
+        try:
+            Duration = int(Duration)
+            if isinstance(update_data['Duration'], float):
+                return jsonify({'error': 'Duration must be an integer'}), 400
+            if Duration < 1:
+                return jsonify({'error': 'Duration must be at least 1'}), 400
+        except ValueError:
             return jsonify({'error': 'Duration must be an integer'}), 400
-    except ValueError:
-        return jsonify({'error': 'Duration must be an integer'}), 400
+        fields_to_update.append('Duration = ?')
+        values_to_update.append(Duration)
+    
+    values_to_update.append(Sub_ID)
     
     conn = get_db_conn()
-    conn.execute('UPDATE Subscriptions SET Price = ?, Duration = ? WHERE Sub_ID = ?', (Price, Duration, Sub_ID))
-    conn.commit()
+    if fields_to_update:
+        query = f"UPDATE Subscriptions SET {', '.join(fields_to_update)} WHERE Sub_ID = ?"
+        conn.execute(query, tuple(values_to_update))
+        conn.commit()
     conn.close()
     
     return jsonify({'message': 'Subscription updated'})
@@ -499,14 +587,14 @@ def create_equipment():
         if isinstance(new_equipment['Quantity'], float):
             return jsonify({'error': 'Quantity must be an integer'}), 400
         if Quantity < 1:
-            return jsonify({'error': 'Quantity must be at least 1'})
+            return jsonify({'error': 'Quantity must be at least 1'}), 400
     except ValueError:
         return jsonify({'error': 'Quantity must be an integer'}), 400
     
     try:
         Cost = float(Cost)
         if Cost < 0:
-            return jsonify({'error': 'Cost must be positive or 0'})
+            return jsonify({'error': 'Cost must be positive or 0'}), 400
     except ValueError:
         return jsonify({'error': 'Cost must be numeric'}), 400
     
@@ -558,26 +646,42 @@ def update_equipment(Eq_ID):
     Quantity = update_data['Quantity']
     Cost = update_data['Cost']
     
-    if not update_data['Name'] or update_data['Name'] == "":
-        return jsonify({'error': 'Name cannot be empty'}), 400
+    fields_to_update = []
+    values_to_update = []
     
-    try:
-        Quantity = int(Quantity)
-        if isinstance(update_data['Quantity'], float):
+    if update_data['Name'] != "":
+        fields_to_update.append('Name = ?')
+        values_to_update.append(Name)
+    
+    if update_data['Quantity'] != "":
+        try:
+            Quantity = int(Quantity)
+            if isinstance(update_data['Quantity'], float):
+                return jsonify({'error': 'Quantity must be an integer'}), 400
+            if Quantity < 1:
+                return jsonify({'error': 'Quantity must be at least 1'})
+        except ValueError:
             return jsonify({'error': 'Quantity must be an integer'}), 400
-        if Quantity < 1:
-            return jsonify({'error': 'Quantity must be at least 1'})
-    except ValueError:
-        return jsonify({'error': 'Quantity must be an integer'}), 400
+        fields_to_update.append('Quantity = ?')
+        values_to_update.append(Quantity)
     
-    try:
-        Cost = float(Cost)
-    except ValueError:
-        return jsonify({'error': 'Cost must be numeric'}), 400
+    if update_data['Cost'] != "":
+        try:
+            Cost = float(Cost)
+            if Cost < 0:
+                return jsonify({'error': 'Cost must be positive or 0'}), 400
+        except ValueError:
+            return jsonify({'error': 'Cost must be numeric'}), 400
+        fields_to_update.append('Cost = ?')
+        values_to_update.append(Cost)
+    
+    values_to_update.append(Eq_ID)
     
     conn = get_db_conn()
-    conn.execute('UPDATE Equipments SET Name = ?, Quantity = ?, Cost = ? WHERE Eq_ID = ?', (Name, Quantity, Cost, Eq_ID))
-    conn.commit()
+    if fields_to_update:
+        query = f"UPDATE Equipments SET {', '.join(fields_to_update)} WHERE Eq_ID = ?"
+        conn.execute(query, tuple(values_to_update))
+        conn.commit()
     conn.close()
     
     return jsonify({'message': 'Equipment updated'})
@@ -616,7 +720,7 @@ def create_exercise():
         if isinstance(new_exercise['Time_Slot'], float):
             return jsonify({'error': 'Time_Slot must be an integer'}), 400
         if Time_Slot < 1:
-            return jsonify({'error': 'Time_Slot must be at least 1'})
+            return jsonify({'error': 'Time_Slot must be at least 1'}), 400
     except ValueError:
         return jsonify({'error': 'Time_Slot must be an integer'}), 400
     
@@ -625,7 +729,7 @@ def create_exercise():
         if isinstance(new_exercise['Frequency'], float):
             return jsonify({'error': 'Frequency must be an integer'}), 400
         if Frequency < 1:
-            return jsonify({'error': 'Frequency must be at least 1'})
+            return jsonify({'error': 'Frequency must be at least 1'}), 400
     except ValueError:
         return jsonify({'error': 'Frequency must be an integer'}), 400
     
@@ -689,13 +793,52 @@ def update_exercise(EX_ID):
     Time_Slot = update_data['Time_Slot']
     Frequency = update_data['Frequency']
     
-    if Type not in ["Upper Body", "Lower Body", "Arm"]:
-        return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm'}), 400
+    fields_to_update = []
+    values_to_update = []
+    
+    if update_data['EX_Name'] != "":
+        fields_to_update.append('EX_Name = ?')
+        values_to_update.append(EX_Name)
+    
+    if update_data['Type'] != "":
+        if Type not in ["Upper Body", "Lower Body", "Arm"]:
+            return jsonify({'error': 'Type must be Upper Body, Lower Body, or Arm'}), 400
+        fields_to_update.append('Type = ?')
+        values_to_update.append(Type)
+    
+    if update_data['Time_Slot'] != "":
+        try:
+            Time_Slot = int(Time_Slot)
+            if isinstance(update_data['Time_Slot'], float):
+                return jsonify({'error': 'Time_Slot must be an integer'}), 400
+            if Time_Slot < 1:
+                return jsonify({'error': 'Time_Slot must be at least 1'}), 400
+        except ValueError:
+            return jsonify({'error': 'Time_Slot must be an integer'}), 400
+        fields_to_update.append('Time_Slot = ?')
+        values_to_update.append(Time_Slot)
+    
+    if update_data['Frequency'] != "":
+        try:
+            Frequency = int(Frequency)
+            if isinstance(new_exercise['Frequency'], float):
+                return jsonify({'error': 'Frequency must be an integer'}), 400
+            if Frequency < 1:
+                return jsonify({'error': 'Frequency must be at least 1'}), 400
+        except ValueError:
+            return jsonify({'error': 'Frequency must be an integer'}), 400
+        fields_to_update.append('Frequency = ?')
+        values_to_update.append(Frequency)
+    
+    values_to_update.append(EX_ID)
     
     conn = get_db_conn()
-    conn.execute('UPDATE Exercises SET EX_Name = ?, Type = ?, Time_Slot = ?, Frequency = ? WHERE EX_ID = ?', (EX_Name, Type, Time_Slot, Frequency, EX_ID))
-    conn.commit()
+    if fields_to_update:
+        query = f"UPDATE Exercises SET {', '.join(fields_to_update)} WHERE EX_ID = ?"
+        conn.execute(query, tuple(values_to_update))
+        conn.commit()
     conn.close()
+    
     return jsonify({'message': 'Exercise updated'})
 
 @app.route('/exercises/<EX_ID>', methods=['DELETE'])

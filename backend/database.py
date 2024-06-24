@@ -15,8 +15,8 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Trainers (
             T_ID TEXT PRIMARY KEY,
             T_Name TEXT NOT NULL,
-            Email_ID TEXT,
-            Phone TEXT,
+            Email_ID TEXT NOT NULL,
+            Phone TEXT NOT NULL,
             Gender TEXT NOT NULL CHECK (Gender IN ('Male', 'Female', 'Others')),
             Hire_Date TEXT NOT NULL,
             Salary REAL NOT NULL CHECK (Salary >= 50000)
@@ -27,14 +27,14 @@ def init_db():
         CREATE TABLE IF NOT EXISTS Members (
             Mem_ID TEXT PRIMARY KEY,
             M_Name TEXT NOT NULL,
-            Phone TEXT,
+            Phone TEXT NOT NULL,
             Start_Date TEXT NOT NULL,
             Gender TEXT NOT NULL CHECK (Gender IN ('Male', 'Female', 'Others')),
             Subs TEXT NOT NULL,
-            Height REAL CHECK (Height > 0),
-            Weight REAL CHECK (Weight > 0),
-            Age INTEGER CHECK (Age >= 0),
-            Email_ID TEXT,
+            Height REAL NOT NULL CHECK (Height > 0),
+            Weight REAL NOT NULL CHECK (Weight > 0),
+            Age INTEGER NOT NULL CHECK (Age >= 0),
+            Email_ID TEXT NOT NULL,
             Trainer_ID TEXT NOT NULL,
             FOREIGN KEY (Trainer_ID) REFERENCES Trainers(T_ID) ON DELETE CASCADE ON UPDATE CASCADE
             FOREIGN KEY (Subs) REFERENCES Subscriptions(Sub_ID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -46,7 +46,7 @@ def init_db():
             Sub_ID TEXT PRIMARY KEY,
             Price REAL NOT NULL CHECK (Price >= 0),
             Duration INTEGER NOT NULL CHECK (Duration >= 1),
-            Sub_Num INTEGER DEFAULT 0
+            Sub_Num INTEGER NOT NULL DEFAULT 0
         )
     ''')
 
