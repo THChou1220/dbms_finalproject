@@ -11,7 +11,7 @@ export const setcategorypage = (page) => ({
 export const trainersendinfo = (type, T_id, T_Name, Email_ID, Phone, Gender, Hire_Date, Salary) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/trainers`, { T_id, T_Name, Email_ID, Phone, Gender, Hire_Date, Salary }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/trainers`, { T_id, T_Name, Email_ID, Phone, Gender, Hire_Date, Salary }).then(() => { console.log('Trainer created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/trainers`).then((res) => {
@@ -20,10 +20,10 @@ export const trainersendinfo = (type, T_id, T_Name, Email_ID, Phone, Gender, Hir
       }).catch(() => { alert('fail') });
     }
     else if (type === 3) {
-      axios.patch(`${API_URL}/trainers/${T_id}`, { T_Name, Email_ID, Phone, Gender, Hire_Date, Salary }).then(() => { }).catch(() => { alert('fail') });
+      axios.patch(`${API_URL}/trainers/${T_id}`, { T_Name, Email_ID, Phone, Gender, Hire_Date, Salary }).then(() => { console.log('Trainer updated'); }).catch(() => { alert('fail') });
     }
     else {
-      axios.delete(`${API_URL}/trainers/${T_id}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/trainers/${T_id}`).then(() => { console.log('Trainer deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
@@ -36,7 +36,7 @@ const trainerdata = (result) => ({
 export const membersendinfo = (type, Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/members`, { Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/members`, { Mem_ID, M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID }).then(() => { console.log('Member created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/members`).then((res) => {
@@ -45,10 +45,10 @@ export const membersendinfo = (type, Mem_ID, M_Name, Phone, Start_Date, Gender, 
       }).catch(() => { alert('fail') });
     }
     else if (type === 3) {
-      axios.patch(`${API_URL}/members/${Mem_ID}`, { M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID }).then(() => { }).catch(() => { alert('fail') });
+      axios.patch(`${API_URL}/members/${Mem_ID}`, { M_Name, Phone, Start_Date, Gender, Subs, Height, Weight, Age, Email_ID, Trainer_ID }).then(() => { console.log('Member updated'); }).catch(() => { alert('fail') });
     }
     else {
-      axios.delete(`${API_URL}/members/${Mem_ID}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/members/${Mem_ID}`).then(() => { console.log('Member deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
@@ -61,7 +61,7 @@ const memberdata = (result) => ({
 export const subscriptionssendinfo = (type, Sub_ID, Price, Duration, Sub_Num) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/subscriptions`, { Sub_ID, Price, Duration, Sub_Num }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/subscriptions`, { Sub_ID, Price, Duration, Sub_Num }).then(() => { console.log('Subscription created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/subscriptions`).then((res) => {
@@ -70,10 +70,10 @@ export const subscriptionssendinfo = (type, Sub_ID, Price, Duration, Sub_Num) =>
       }).catch(() => { alert('fail') });
     }
     else if (type === 3) {
-      axios.patch(`${API_URL}/subscriptions/${Sub_ID}`, { Price, Duration, Sub_Num }).then(() => { }).catch(() => { alert('fail') });
+      axios.patch(`${API_URL}/subscriptions/${Sub_ID}`, { Price, Duration, Sub_Num }).then(() => { console.log('Subscription updated'); }).catch(() => { alert('fail') });
     }
     else {
-      axios.delete(`${API_URL}/subscriptions/${Sub_ID}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/subscriptions/${Sub_ID}`).then(() => { console.log('Subscription deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
@@ -95,7 +95,7 @@ export const consistsendinfo = (type, Sub_Pack, Exercise_ID) => {
       }).catch(() => { alert('fail') });
     }
     else {
-      axios.delete(`${API_URL}/consist`, { data:{Sub_Pack: Sub_Pack, Exercise_ID: Exercise_ID}}).then(() => { console.log('Relation-Consist deleted'); }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/consist`, { data:{Sub_Pack: Sub_Pack, Exercise_ID: Exercise_ID} }).then(() => { console.log('Relation-Consist deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
@@ -108,7 +108,7 @@ const consistdata = (result) => ({
 export const equipmentsendinfo = (type, Eq_ID, Name, Quantity, Cost) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/equipments`, { Eq_ID, Name, Quantity, Cost }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/equipments`, { Eq_ID, Name, Quantity, Cost }).then(() => { console.log('Equipment created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/equipments`).then((res) => {
@@ -117,10 +117,10 @@ export const equipmentsendinfo = (type, Eq_ID, Name, Quantity, Cost) => {
       }).catch(() => { alert('fail') });
     }
     else if (type === 3) {
-      axios.patch(`${API_URL}/equipments/${Eq_ID}`, { Name, Quantity, Cost }).then(() => { }).catch(() => { alert('fail') });
+      axios.patch(`${API_URL}/equipments/${Eq_ID}`, { Name, Quantity, Cost }).then(() => { console.log('Equipment updated'); }).catch(() => { alert('fail') });
     }
     else {
-      axios.delete(`${API_URL}/equipments/${Eq_ID}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/equipments/${Eq_ID}`).then(() => { console.log('Equipment deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
@@ -155,7 +155,7 @@ const usedata = (result) => ({
 export const exercisesendinfo = (type, EX_id, EX_Name, Type, Time_Slot, Frequency) => {
   return (dispatch) => {
     if (type === 1) {
-      axios.post(`${API_URL}/exercises`, { EX_id, EX_Name, Type, Time_Slot, Frequency }).then(() => { }).catch(() => { alert('fail') });
+      axios.post(`${API_URL}/exercises`, { EX_id, EX_Name, Type, Time_Slot, Frequency }).then(() => { console.log('Exercise created'); }).catch(() => { alert('fail') });
     }
     else if (type === 2) {
       axios.get(`${API_URL}/exercises`).then((res) => {
@@ -164,10 +164,10 @@ export const exercisesendinfo = (type, EX_id, EX_Name, Type, Time_Slot, Frequenc
       }).catch(() => { alert('fail') });
     }
     else if (type === 3) {
-      axios.patch(`${API_URL}/exercises/${EX_id}`, { EX_Name, Type, Time_Slot, Frequency }).then(() => { }).catch(() => { alert('fail') });
+      axios.patch(`${API_URL}/exercises/${EX_id}`, { EX_Name, Type, Time_Slot, Frequency }).then(() => { console.log('Exercise updated'); }).catch(() => { alert('fail') });
     }
     else {
-      axios.delete(`${API_URL}/exercises/${EX_id}`).then(() => { }).catch(() => { alert('fail') });
+      axios.delete(`${API_URL}/exercises/${EX_id}`).then(() => { console.log('Exercise deleted'); }).catch(() => { alert('fail') });
     }
   }
 }
